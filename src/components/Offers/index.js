@@ -17,6 +17,7 @@ function Offers() {
                 {"Create offers"}
               </Button>
             }
+            closeIcon
             open={createOfferModalOpen}
             onClose={() => setCreateOfferModalOpen(false)}
           >
@@ -24,16 +25,6 @@ function Offers() {
               <Grid.Row>
                 <Grid.Column>
                   <NewOffer />
-                </Grid.Column>
-              </Grid.Row>
-              <Grid.Row>
-                <Grid.Column>
-                  <Button
-                    floated={"right"}
-                    onClick={() => setCreateOfferModalOpen(false)}
-                  >
-                    back
-                  </Button>
                 </Grid.Column>
               </Grid.Row>
             </Grid>

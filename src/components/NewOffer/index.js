@@ -1,97 +1,113 @@
 import React, { useState } from "react";
 import { Grid, Button, Dropdown } from "semantic-ui-react";
 
+import { database } from "../../services/firebase";
+import { useList } from "react-firebase-hooks/database";
+
 import OfferRow from "../OfferRow";
 
-// offer to
-// I offer
-// I want
-
-const friendOptions = [
-  {
-    key: "Jenny Hess",
-    text: "Jenny Hess",
-    value: "Jenny Hess",
-  },
-  {
-    key: "Elliot Fu",
-    text: "Elliot Fu",
-    value: "Elliot Fu",
-  },
-];
-
 function NewOffer() {
-  const [bid, setBid] = useState([12, 0, 0, 0]);
-  const [ask, setAsk] = useState([5, 0, 0, 0]);
+  const [bid, setBid] = useState([0, 0, 0, 0]);
+  const [ask, setAsk] = useState([0, 0, 0, 0]);
   const [offerTo, setOfferTo] = useState("Everyone");
 
-  const handleBidIncrement = (column, increment) => {
+  const offerListRef = database.ref("/games/1/offers");
+
+  const OfferToList = [
+    {
+      key: "Jenny Hess",
+      text: "Jenny Hess",
+      value: "Jenny Hess",
+    },
+    {
+      key: "Elliot Fu",
+      text: "Elliot Fu",
+      value: "Elliot Fu",
+    },
+    {
+      key: "Everyone",
+      text: "Everyone",
+      value: "Everyone",
+    },
+  ];
+
+  const handleChange = (state, setState) => (key, increment) => {
+    let newState = [...state];
     if (increment) {
-      const newBid = bid;
-      newBid[column] += 1;
-      setBid(newBid);
+      newState[key] = newState[key] + 1;
     } else {
-      const newBid = bid;
-      newBid[column] -= 1;
-      setBid(newBid);
+      newState[key] = newState[key] - 1;
     }
+    setState(newState);
   };
 
-  const handleAskChange = (column, increment) => {
-    console.log("did it");
-    console.log(bid);
-    console.log(ask);
-    if (increment) {
-      let newAsk = ask;
-      newAsk[column] += 1;
-      setAsk(newAsk);
-    } else {
-      let newAsk = ask;
-      newAsk[column] -= 1;
-      setAsk(newAsk);
-    }
+  const handleOfferToChange = (setState) => (data) => {
+    setState(data["value"]);
   };
 
-  const values = [1, 2, 3, 4];
+  const createOffer = (bid, ask, offerTo) => {
+    let canAccept = [];
+    if (offerTo === "Everyone") {
+      canAccept = [1, 2, 3, 4];
+    } else {
+      canAccept.push(offerTo);
+    }
+    offerListRef.push({
+      createdBy: "userId",
+      bid: bid,
+      ask: ask,
+      canAccept: canAccept,
+    });
+  };
 
   return (
-    <Grid>
+    <Grid container center padded>
       <Grid.Row>
-        <Grid.Column>
-          <h3>Create new Offer</h3>
+        <Grid.Column textAlign={"center"}>
+          <Button onClick={() => console.log(bid, ask, offerTo)}> Print</Button>
+          <h3>{"This offer can be accepted by"}</h3>
         </Grid.Column>
-      </Grid.Row>
-      <Grid.Row>
-        <Grid.Column>
-          <Button fluid>{"123"}</Button>
-        </Grid.Column>
-      </Grid.Row>
-      <Grid.Row>
-        <Grid.Column>Offer for</Grid.Column>
       </Grid.Row>
       <Grid.Row>
         <Grid.Column>
           <Dropdown
-            options={friendOptions}
+            fluid
+            options={OfferToList}
             selection
-            placeholder={"Everyone"}
+            value={offerTo}
+            onChange={(event, data) => handleOfferToChange(setOfferTo)(data)}
           />
         </Grid.Column>
       </Grid.Row>
       <Grid.Row>
-        <Grid.Column>Ask</Grid.Column>
-      </Grid.Row>
-      <Grid.Row>
-        <Grid.Column>
-          <OfferRow offerState={ask} handleChange={handleAskChange} />
+        <Grid.Column textAlign={"center"}>
+          <h3>{"I want to give"}</h3>
         </Grid.Column>
       </Grid.Row>
       <Grid.Row>
-        <Grid.Column>Bid</Grid.Column>
+        <Grid.Column fluid>
+          <OfferRow offerState={bid} handleChange={handleChange(bid, setBid)} />
+        </Grid.Column>
       </Grid.Row>
       <Grid.Row>
-        <Grid.Column fluid>
-          <OfferRow offerState={bid} handleChange={handleBidIncrement} />
+        <Grid.Column textAlign={"center"}>
+          <h3>{"I want to recieve"}</h3>
+        </Grid.Column>
+      </Grid.Row>
+      <Grid.Row>
+        <Grid.Column>
+          <OfferRow offerState={ask} handleChange={handleChange(ask, setAsk)} />
+        </Grid.Column>
+      </Grid.Row>
+      <Grid.Row>
+        <Grid.Column>
+          <Button
+            fluid
+            onClick={() => createOffer(bid, ask, offerTo)}
+            color={"green"}
+          >
+            Create a new offer
+          </Button>
         </Grid.Column>
       </Grid.Row>
     </Grid>
