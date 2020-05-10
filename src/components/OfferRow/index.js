@@ -1,6 +1,5 @@
 import React from "react";
-import { Grid, Label, Button, Segment, Input, Icon } from "semantic-ui-react";
-import ChangeValue from "../ChangeValue";
+import { Grid, Button, Segment, Icon } from "semantic-ui-react";
 
 function OfferRow({ offerState, handleChange }) {
   const colors = ["red", "blue", "yellow", "green"];

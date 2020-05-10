@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 // import { useList } from "react-firebase-hooks/database";
 // import { useParams } from "react-router-dom";
 
 // import { database } from "../../services/firebase";
+
+import { GameContext } from "../../context/game";
 
 import Score from "../Score";
 import Inventory from "../Inventory";
@@ -55,6 +57,8 @@ function Game() {
   //     </div>
   //   );
 
+  const gameState = useContext(GameContext);
+
   return (
     <Grid center container>
       <Grid.Row>
@@ -71,6 +75,9 @@ function Game() {
         <Grid.Column>
           <Inventory score={[1, 2, 3, 4]} />
         </Grid.Column>
+      </Grid.Row>
+      <Grid.Row>
+        <Grid.Column>{JSON.stringify(gameState)}</Grid.Column>
       </Grid.Row>
     </Grid>
   );

@@ -53,8 +53,18 @@ class Firebase {
     });
 
   // *** User API ***
+  allUsers = () => this.db.ref("users");
   user = (uid) => this.db.ref(`users/${uid}`);
-  users = () => this.db.ref("users");
+
+  // *** Game API ***
+  allGames = () => this.db.ref("games");
+  game = (gameId) => this.db.ref(`games/${gameId}`);
+  gamePlayers = (gameId) => this.db.ref(`games/${gameId}/players`);
+  gameOffers = (gameId) => this.db.ref(`games/${gameId}/offers`);
+  gameItemsForUser = (gameId, uid) =>
+    this.db.ref(`games/${gameId}/items/${uid}`);
+  gameValuesForUser = (gameId, uid) =>
+    this.db.ref(`games/${gameId}/values/${uid}`);
 }
 
 export default Firebase;

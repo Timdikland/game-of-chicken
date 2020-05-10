@@ -1,6 +1,5 @@
 import React, { useState, useContext } from "react";
 import { Grid, Button, Dropdown } from "semantic-ui-react";
-import { useList } from "react-firebase-hooks/database";
 
 import { FirebaseContext } from "../../context/firebase";
 
@@ -12,7 +11,7 @@ function NewOffer() {
   const [offerTo, setOfferTo] = useState("Everyone");
 
   const firebase = useContext(FirebaseContext);
-  const offerListRef = firebase.database.ref("/games/1/offers");
+  const offerListRef = firebase.db.ref("/games/1/offers");
 
   const OfferToList = [
     {
@@ -65,7 +64,6 @@ function NewOffer() {
     <Grid container center padded>
       <Grid.Row>
         <Grid.Column textAlign={"center"}>
-          <Button onClick={() => console.log(bid, ask, offerTo)}> Print</Button>
           <h3>{"This offer can be accepted by"}</h3>
         </Grid.Column>
       </Grid.Row>
