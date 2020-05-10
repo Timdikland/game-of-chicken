@@ -57,9 +57,11 @@ class Firebase {
   user = (uid) => this.db.ref(`users/${uid}`);
 
   // *** Game API ***
-  allGames = () => this.db.ref("games");
+  games = () => this.db.ref("games");
   game = (gameId) => this.db.ref(`games/${gameId}`);
   gamePlayers = (gameId) => this.db.ref(`games/${gameId}/players`);
+  gamePlayer = (gameId, userId) =>
+    this.db.ref(`games/${gameId}/players/${userId}`);
   gameOffers = (gameId) => this.db.ref(`games/${gameId}/offers`);
   gameItemsForUser = (gameId, uid) =>
     this.db.ref(`games/${gameId}/items/${uid}`);
