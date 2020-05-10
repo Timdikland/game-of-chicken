@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Grid, Button, Dropdown } from "semantic-ui-react";
-
-import { database } from "../../services/firebase";
 import { useList } from "react-firebase-hooks/database";
+
+import { FirebaseContext } from "../../context/firebase";
 
 import OfferRow from "../OfferRow";
 
@@ -11,7 +11,8 @@ function NewOffer() {
   const [ask, setAsk] = useState([0, 0, 0, 0]);
   const [offerTo, setOfferTo] = useState("Everyone");
 
-  const offerListRef = database.ref("/games/1/offers");
+  const firebase = useContext(FirebaseContext);
+  const offerListRef = firebase.database.ref("/games/1/offers");
 
   const OfferToList = [
     {

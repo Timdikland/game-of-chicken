@@ -33,6 +33,10 @@ class Firebase {
         result.user.updateProfile({
           displayName: displayName,
         });
+        this.user(result.user.uid).set({
+          uid: result.user.uid,
+          displyName: displayName,
+        });
       })
       .catch((err) => console.log(err));
   };

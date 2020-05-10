@@ -1,6 +1,8 @@
 import React from "react";
 import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
 
+import { withUser } from "../../context/user";
+
 import Home from "../Home";
 import Lobby from "../Lobby";
 import Game from "../Game";
@@ -17,4 +19,4 @@ function App() {
   );
 }
 
-export default App;
+export default withUser(App);

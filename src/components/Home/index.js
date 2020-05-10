@@ -1,30 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
+import { Input, Button, Form } from "semantic-ui-react";
 
-import { auth, database } from "../../services/firebase.js";
-
+import { FirebaseContext } from "../../context/firebase";
+import { UserContext } from "../../context/user";
 function Home() {
   const [displayName, setDisplayName] = useState("");
   const history = useHistory();
 
-  const createUser = (displayName) => {
-    auth
-      .signInAnonymously()
-      .then((result) => {
-        console.log(result);
-        result.user.updateProfile({
-          displayName: displayName,
-        });
-      })
-      .catch((err) => console.log("error", err));
-  };
+  const user = useContext(UserContext);
 
-  const addUserToDatabase = (user) => {
-    database.ref("users").set({
-      uid: user.uid,
-      displayName: user.displayName,
-    });
-  };
+  const firebase = useContext(FirebaseContext);
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -33,16 +19,23 @@ function Home() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    createUser(displayName);
-    addUserToDatabase();
+    firebase.doSignInWithDisplayName(displayName);
+    // createUser(displayName);
+    // addUserToDatabase();
     // history.push("/lobby");
   };
 
   return (
     <div>
-      <p>{"Home Page: Enter your username"}</p>
-      <input value={displayName} onChange={(e) => handleChange(e)} />
-      <button onClick={(e) => handleSubmit(e)}>{"Let's go!"}</button>
+      <h3>{"Home Page: Enter your username"}</h3>
+      <Input
+        value={displayName}
+        onChange={(event, data) => handleChange(event)}
+      />
+      <Button onClick={(event, data) => handleSubmit(event)}>
+        {"Let's go!"}
+      </Button>
+      {JSON.stringify(user)}
     </div>
   );
 }
