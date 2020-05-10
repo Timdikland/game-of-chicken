@@ -1,28 +1,47 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 
-import { database } from "../../services/firebase.js";
+import { auth, database } from "../../services/firebase.js";
 
 function Home() {
-  const [username, setUsername] = useState("");
-  const usernameRef = database.ref("users/");
+  const [displayName, setDisplayName] = useState("");
   const history = useHistory();
+
+  const createUser = (displayName) => {
+    auth
+      .signInAnonymously()
+      .then((result) => {
+        console.log(result);
+        result.user.updateProfile({
+          displayName: displayName,
+        });
+      })
+      .catch((err) => console.log("error", err));
+  };
+
+  const addUserToDatabase = (user) => {
+    database.ref("users").set({
+      uid: user.uid,
+      displayName: user.displayName,
+    });
+  };
 
   const handleChange = (e) => {
     e.preventDefault();
-    setUsername(e.target.value);
+    setDisplayName(e.target.value);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    usernameRef.set({ username: username });
-    history.push("/lobby");
+    createUser(displayName);
+    addUserToDatabase();
+    // history.push("/lobby");
   };
 
   return (
     <div>
       <p>{"Home Page: Enter your username"}</p>
-      <input value={username} onChange={(e) => handleChange(e)} />
+      <input value={displayName} onChange={(e) => handleChange(e)} />
       <button onClick={(e) => handleSubmit(e)}>{"Let's go!"}</button>
     </div>
   );

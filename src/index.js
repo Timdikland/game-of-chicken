@@ -3,14 +3,15 @@ import ReactDOM from "react-dom";
 import { BrowserRouter as Router } from "react-router-dom";
 import "semantic-ui-css/semantic.min.css";
 
-import App from "./App";
+import App from "./components/App";
+import Firebase, { FirebaseContext } from "./context/firebase";
 import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Router>
+    <FirebaseContext.Provider value={new Firebase()}>
       <App />
-    </Router>
+    </FirebaseContext.Provider>
   </React.StrictMode>,
   document.getElementById("root")
 );
