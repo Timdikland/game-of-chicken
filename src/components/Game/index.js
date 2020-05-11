@@ -1,85 +1,41 @@
-import React, { useContext } from "react";
-// import { useList } from "react-firebase-hooks/database";
-// import { useParams } from "react-router-dom";
-
-// import { database } from "../../services/firebase";
+import React, { useState, useContext } from "react";
+import { useParams } from "react-router-dom";
 
 import { GameContext } from "../../context/game";
+import { UserContext } from "../../context/user";
+import { FirebaseContext } from "../../context/firebase";
 
-import Score from "../Score";
-import Inventory from "../Inventory";
-import Offers from "../Offers";
-
-import NewOffer from "../NewOffer";
-import { Grid } from "semantic-ui-react";
+import GameBoard from "../GameBoard";
+import GameRoom from "../GameRoom";
 
 function Game() {
-  //   const gameListRef = database.ref("/games");
-  //   const userListRef = database.ref("/users");
-  //   const params = useParams();
-
-  //   const [snapshots, loading, error] = useList(userListRef);
-
-  //   const startGame = () => {
-  //     gameListRef.push({ gameId: "24" });
-  //   };
-
-  //   return (
-  //     <div>
-  //       <h1>Welcome to the game</h1>
-  //       <p>{params}</p>
-  //       <button onClick={() => startGame()}>Start game</button>
-  //       {snapshots.map((value) => {
-  //         return <p>{value.val()}</p>;
-  //       })}
-  //     </div>
-  //   );
-
-  //   return (
-  //     <div>
-  //       <p>
-  //         {error && <strong>Error: {error}</strong>}
-  //         {loading && <span>List: Loading...</span>}
-  //         {!loading && snapshots && (
-  //           <React.Fragment>
-  //             <span>
-  //               List:{" "}
-  //               {snapshots.map((v) => (
-  //                 <div>
-  //                   <p>{v.key}</p>
-  //                   <p>{v.val()}</p>
-  //                 </div>
-  //               ))}
-  //             </span>
-  //           </React.Fragment>
-  //         )}
-  //       </p>
-  //     </div>
-  //   );
-
   const gameState = useContext(GameContext);
+  const user = useContext(UserContext);
+  const firebase = useContext(FirebaseContext);
 
-  return (
-    <Grid center container>
-      <Grid.Row>
-        <Grid.Column>
-          <Score score={[1, 2, 3, 4]} />
-        </Grid.Column>
-      </Grid.Row>
-      <Grid.Row>
-        <Grid.Column>
-          <Offers />
-        </Grid.Column>
-      </Grid.Row>
-      <Grid.Row>
-        <Grid.Column>
-          <Inventory score={[1, 2, 3, 4]} />
-        </Grid.Column>
-      </Grid.Row>
-      <Grid.Row>
-        <Grid.Column>{JSON.stringify(gameState)}</Grid.Column>
-      </Grid.Row>
-    </Grid>
+  const params = useParams();
+
+  const [gameStarted, setGameStarted] = useState(false);
+
+  const handleStartGame = (setState) => (allReady) => {
+    if (allReady) {
+      setState(true);
+    }
+  };
+
+  const handlePlayerStatusChange = (userId) => (players) => {
+    const status = players[userId].isReady;
+    firebase.gamePlayer(params.gameId, userId).update({ isReady: !status });
+  };
+
+  return gameStarted ? (
+    <GameBoard gameState={gameState} />
+  ) : (
+    <GameRoom
+      gameState={gameState}
+      handleStartGame={handleStartGame(setGameStarted)}
+      handlePlayerStatusChange={handlePlayerStatusChange(user.uid)}
+    />
   );
 }
 

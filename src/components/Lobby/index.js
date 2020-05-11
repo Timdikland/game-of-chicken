@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Grid, Input, Button, Header } from "semantic-ui-react";
 
 import { FirebaseContext } from "../../context/firebase";
@@ -19,17 +19,23 @@ function Lobby() {
 
   const createGame = () => {
     console.log(user);
-    const gid = firebase.allGames().push().key;
+    const gid = firebase.games().push().key;
+    // firebase
+    //   .gamePlayers(gid)
+    //   .push({ uid: user.uid, displayName: user.displayName, isReady: false });
     firebase
-      .gamePlayers(gid)
-      .push({ uid: user.uid, displayName: user.displayName });
+      .gamePlayer(gid, user.uid)
+      .set({ displayName: user.displayName, isReady: false });
     history.push(`/games/${gid}`);
   };
 
   const joinGame = (gid) => {
+    // firebase
+    //   .gamePlayers(gid)
+    //   .push({ uid: user.uid, displayName: user.displayName, isReady: false });
     firebase
-      .gamePlayers(gid)
-      .push({ uid: user.uid, displayName: user.displayName });
+      .gamePlayer(gid, user.uid)
+      .set({ displayName: user.displayName, isReady: false });
     history.push(`/games/${gid}`);
   };
 
@@ -42,7 +48,7 @@ function Lobby() {
       </Grid.Row>
       <Grid.Row>
         <Grid.Column textAlign={"center"}>
-          <Header>{"Enter a code to join an existing game"}</Header>
+          <Header>{`Hi there, ${user.displayName}! Enter a code to join an existing game`}</Header>
         </Grid.Column>
       </Grid.Row>
       <Grid.Row>

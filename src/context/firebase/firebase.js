@@ -53,7 +53,7 @@ class Firebase {
     });
 
   // *** User API ***
-  allUsers = () => this.db.ref("users");
+  users = () => this.db.ref("users");
   user = (uid) => this.db.ref(`users/${uid}`);
 
   // *** Game API ***
