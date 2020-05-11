@@ -18,7 +18,12 @@ function allPlayersReady(players) {
   }
 }
 
-function GameRoom({ gameState, handlePlayerStatusChange, handleStartGame }) {
+function GameRoom({
+  gameState,
+  handlePlayerStatusChange,
+  handleStartGame,
+  gameId,
+}) {
   const players = gameState.players;
   const allReady = allPlayersReady(players);
 
@@ -27,6 +32,7 @@ function GameRoom({ gameState, handlePlayerStatusChange, handleStartGame }) {
       <Grid.Row>
         <Grid.Column>
           <Header>Are you ready to play?</Header>
+          <Header>{`Use the gameId: ${gameId} to join!`}</Header>
         </Grid.Column>
       </Grid.Row>
       <Grid.Row>

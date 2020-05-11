@@ -35,6 +35,7 @@ function Game() {
       gameState={gameState}
       handleStartGame={handleStartGame(setGameStarted)}
       handlePlayerStatusChange={handlePlayerStatusChange(user.uid)}
+      gameId={params.gameId}
     />
   );
 }

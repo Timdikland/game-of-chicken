@@ -6,7 +6,6 @@ import { GameContext } from "../../context/game";
 import Score from "../Score";
 import Offers from "../Offers";
 import Inventory from "../Inventory";
-import Game from "../Game";
 
 function GameBoard() {
   const gameState = useContext(GameContext);
