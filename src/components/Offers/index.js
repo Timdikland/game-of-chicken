@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Modal, Grid } from "semantic-ui-react";
 
 import NewOffer from "../NewOffer";
+import ManageOffers from "../ManageOffers";
 
 function Offers() {
   const [createOfferModalOpen, setCreateOfferModalOpen] = useState(false);
@@ -39,11 +40,18 @@ function Offers() {
                 {"Accept offers"}
               </Button>
             }
+            closeIcon
             open={acceptOfferModalOpen}
             onClose={() => setAcceptOfferModalOpen(false)}
           >
             Modal Accept
-            <Button onClick={() => setAcceptOfferModalOpen(false)}>back</Button>
+            <Grid center container>
+              <Grid.Row>
+                <Grid.Column>
+                  <ManageOffers />
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
           </Modal>
         </Grid.Column>
       </Grid.Row>
