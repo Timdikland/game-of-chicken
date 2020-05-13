@@ -48,7 +48,7 @@ function Lobby() {
       </Grid.Row>
       <Grid.Row>
         <Grid.Column textAlign={"center"}>
-          <Header>{`Hi there, ${user.displayName}! Enter a code to join an existing game`}</Header>
+          <Header>{`Hi there! Enter a code to join an existing game`}</Header>
         </Grid.Column>
       </Grid.Row>
       <Grid.Row>
