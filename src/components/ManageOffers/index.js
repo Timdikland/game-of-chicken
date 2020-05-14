@@ -11,10 +11,10 @@ function TradeRow(props) {
         <Grid.Column>Taker</Grid.Column>
       </Grid.Row>
       <Grid.Row columns={2}>
-        <Grid.Column>
-          <TableValues />
+        <Grid.Column fluid>
+          <ValueLabels />
         </Grid.Column>
-        <Grid.Column>
+        <Grid.Column fluid>
           <ValueLabels />
         </Grid.Column>
       </Grid.Row>
@@ -25,27 +25,25 @@ function TradeRow(props) {
 function ValueLabels() {
   return (
     <Grid>
-      <Grid.Row>
+      <Grid.Row columns={4}>
         <Grid.Column>
           <Label size="tiny">
-            <Icon name="circle" size="tiny" color="green" /> 1
+            <Icon name="circle" size="mini" color="green" /> 1
           </Label>
         </Grid.Column>
         <Grid.Column>
           <Label size="tiny">
-            <Icon name="circle" size="tiny" color="green" /> 1
-          </Label>
-        </Grid.Column>
-      </Grid.Row>
-      <Grid.Row>
-        <Grid.Column>
-          <Label size="tiny">
-            <Icon name="circle" size="tiny" color="green" /> 1
+            <Icon name="circle" size="mini" color="green" /> 1
           </Label>
         </Grid.Column>
         <Grid.Column>
           <Label size="tiny">
-            <Icon name="circle" size="tiny" color="green" /> 1
+            <Icon name="circle" size="mini" color="green" /> 1
+          </Label>
+        </Grid.Column>
+        <Grid.Column>
+          <Label size="tiny">
+            <Icon name="circle" size="mini" color="green" /> 1
           </Label>
         </Grid.Column>
       </Grid.Row>
@@ -53,33 +51,25 @@ function ValueLabels() {
   );
 }
 
-function TableValues() {
+function SimpleTable() {
+  const arr_nums = [1, 2, 3, 4];
+  const arr_cols = ["green", "blue", "red", "yellow"];
   return (
-    <Table basic="very">
+    <Table basic compact singleLine unstackable>
       <Table.Body>
         <Table.Row>
-          <Table.Cell>
-            <Label size="tiny">
-              <Icon name="circle" size="tiny" color="green" /> 1
-            </Label>
-          </Table.Cell>
-          <Table.Cell>
-            <Label size="tiny">
-              <Icon name="circle" size="tiny" color="green" /> 1
-            </Label>
-          </Table.Cell>
+          {arr_nums.map((v, idx) => {
+            return <Table.Cell>{v}</Table.Cell>;
+          })}
         </Table.Row>
         <Table.Row>
-          <Table.Cell>
-            <Label size="tiny">
-              <Icon name="circle" size="tiny" color="green" /> 1
-            </Label>
-          </Table.Cell>
-          <Table.Cell>
-            <Label size="tiny">
-              <Icon name="circle" size="tiny" color="green" /> 1
-            </Label>
-          </Table.Cell>
+          {arr_cols.map((v, idx) => {
+            return (
+              <Table.Cell>
+                <Icon name="circle" size="small" color={v} />
+              </Table.Cell>
+            );
+          })}
         </Table.Row>
       </Table.Body>
     </Table>
@@ -88,12 +78,17 @@ function TableValues() {
 
 function ManageOffers() {
   return (
-    <Grid container center>
+    <Grid>
       <Grid.Row>
         <Grid.Column>Hi there :)</Grid.Column>
       </Grid.Row>
-      <Grid.Row>
-        <TableValues />
+      <Grid.Row columns={2}>
+        <Grid.Column>
+          <SimpleTable />
+        </Grid.Column>
+        <Grid.Column>
+          <SimpleTable />
+        </Grid.Column>
       </Grid.Row>
     </Grid>
   );

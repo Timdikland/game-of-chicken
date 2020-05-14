@@ -45,7 +45,7 @@ function Offers() {
             onClose={() => setAcceptOfferModalOpen(false)}
           >
             Modal Accept
-            <Grid>
+            <Grid container center>
               <Grid.Row>
                 <Grid.Column>
                   <ManageOffers />

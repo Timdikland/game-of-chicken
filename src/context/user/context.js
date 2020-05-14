@@ -5,22 +5,20 @@ import { FirebaseContext } from "../firebase";
 const UserContext = React.createContext(null);
 
 export const withUser = (Component) => (props) => {
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  const [user, setUser] = useState("");
   const firebase = useContext(FirebaseContext);
 
   const handleUser = (newUser) => {
-    localStorage.setItem("user", JSON.stringify(newUser));
     setUser(newUser);
   };
 
   const handleNoUser = () => {
-    localStorage.removeItem("user");
     setUser(null);
   };
 
   useEffect(() => {
     const res = firebase.onAuthUserListener(handleUser, handleNoUser);
-    return () => res();
+    return () => console.log("?");
   });
 
   return (
