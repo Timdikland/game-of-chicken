@@ -9,7 +9,7 @@ function FunctionButton() {
 
   const startFunction = () => {
     const helloWorld = firebase.functions.httpsCallable("helloWorld");
-    helloWorld({ key: "value" })
+    helloWorld()
       .then((result) => setResponse(result))
       .catch((err) => console.log(err));
   };
