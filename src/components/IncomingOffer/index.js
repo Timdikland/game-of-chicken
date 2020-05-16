@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Icon, Table } from "semantic-ui-react";
+import { Grid, Icon, Table, Button } from "semantic-ui-react";
 
 function AskTable({ asker, ask, items }) {
   return (
@@ -77,6 +77,14 @@ function IncomingOffer({ ask, asker, bid, bidder, items }) {
         </Grid.Column>
         <Grid.Column width={7}>
           <AskTable ask={ask} asker={asker} items={items} />
+        </Grid.Column>
+      </Grid.Row>
+      <Grid.Row columns={2}>
+        <Grid.Column>
+          <Button fluid>Accept</Button>
+        </Grid.Column>
+        <Grid.Column>
+          <Button fluid>Reject</Button>
         </Grid.Column>
       </Grid.Row>
     </Grid>
