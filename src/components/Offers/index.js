@@ -4,7 +4,7 @@ import { Button, Modal, Grid } from "semantic-ui-react";
 import NewOffer from "../NewOffer";
 import ManageOffers from "../ManageOffers";
 
-function Offers() {
+function Offers({ players, items, offers }) {
   const [createOfferModalOpen, setCreateOfferModalOpen] = useState(false);
   const [acceptOfferModalOpen, setAcceptOfferModalOpen] = useState(false);
 
@@ -25,7 +25,7 @@ function Offers() {
             <Grid center container>
               <Grid.Row>
                 <Grid.Column>
-                  <NewOffer />
+                  <NewOffer players={players} items={items} offers={offers} />
                 </Grid.Column>
               </Grid.Row>
             </Grid>

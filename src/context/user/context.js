@@ -18,7 +18,7 @@ export const withUser = (Component) => (props) => {
 
   useEffect(() => {
     const res = firebase.onAuthUserListener(handleUser, handleNoUser);
-    return () => console.log("?");
+    return () => console.log("?", res);
   });
 
   return (

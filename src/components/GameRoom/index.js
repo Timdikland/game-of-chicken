@@ -26,6 +26,7 @@ function GameRoom({
 }) {
   const players = gameState.players;
   const allReady = allPlayersReady(players);
+  handleStartGame(allReady);
 
   return (
     <Grid container center>

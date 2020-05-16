@@ -14,6 +14,13 @@ function FunctionButton() {
       .catch((err) => console.log(err));
   };
 
+  const callF = () => {
+    const startGame = firebase.functions.httpsCallable("addItem");
+    startGame({ item: "hello world" })
+      .then((result) => setResponse(result))
+      .catch((err) => console.log(err));
+  };
+
   return (
     <div>
       <Button onClick={() => startFunction()}> Start functie</Button>
