@@ -11,19 +11,19 @@ function AskTable({ asker, ask, items }) {
       </Table.Header>
       <Table.Body>
         <Table.Row>
-          {items.map((v, idx) => {
+          {Object.keys(ask).map((key, idx) => {
             return (
               <Table.Cell key={idx}>
-                <Icon name="circle" size="small" color={v} />
+                <Icon name="circle" size="small" color={key} />
               </Table.Cell>
             );
           })}
         </Table.Row>
         <Table.Row>
-          {ask.map((v, idx) => {
+          {Object.keys(ask).map((key, idx) => {
             return (
               <Table.Cell textAlign="center" key={idx}>
-                {v}
+                {ask[key]}
               </Table.Cell>
             );
           })}
@@ -43,19 +43,19 @@ function BidTable({ bidder, bid, items }) {
       </Table.Header>
       <Table.Body>
         <Table.Row>
-          {items.map((v, idx) => {
+          {Object.keys(bid).map((key, idx) => {
             return (
               <Table.Cell key={idx}>
-                <Icon name="circle" size="small" color={v} />
+                <Icon name="circle" size="small" color={key} />
               </Table.Cell>
             );
           })}
         </Table.Row>
         <Table.Row>
-          {bid.map((v, idx) => {
+          {Object.keys(bid).map((key, idx) => {
             return (
               <Table.Cell textAlign="center" key={idx}>
-                {v}
+                {bid[key]}
               </Table.Cell>
             );
           })}

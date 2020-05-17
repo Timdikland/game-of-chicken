@@ -1,42 +1,46 @@
-import React from "react";
+import React, { useContext } from "react";
+
+import { GameContext } from "../../context/game";
+import { ITEMS } from "../../constants/gameItems";
 
 import IncomingOffer from "../IncomingOffer";
 
 function ManageOffers() {
-  const offers = [
-    {
-      ask: [0, 0, 0, 1],
-      asker: "Tim",
-      bid: [0, 1, 0, 0],
-      bidder: "Max",
-      offerId: "abc",
-    },
-    {
-      ask: [0, 0, 0, 1],
-      asker: "Tim",
-      bid: [0, 1, 0, 0],
-      bidder: "Max",
-      offerId: "qwe",
-    },
-  ];
+  const game = useContext(GameContext);
+  const offers = Object.values(game.offers);
+  const players = game.players;
 
-  const items = ["red", "yellow", "green", "blue"];
+  return (
+    <div>
+      {!!offers ? (
+        <NonEmptyOfferList offers={offers} players={players} />
+      ) : (
+        <EmptyOfferList />
+      )}
+    </div>
+  );
+}
+
+function NonEmptyOfferList({ offers, players }) {
   return (
     <div>
       {offers.map((val, idx) => {
         return (
           <IncomingOffer
             ask={val.ask}
-            asker={val.asker}
+            asker={players[val.offerTo[0]].displayName}
             bid={val.bid}
-            bidder={val.bidder}
+            bidder={val.OfferFrom}
             offerId={val.offerId}
-            items={items}
           />
         );
       })}
     </div>
   );
+}
+
+function EmptyOfferList() {
+  return <p> There are no offers for you</p>;
 }
 
 export default ManageOffers;

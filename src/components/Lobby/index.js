@@ -26,6 +26,7 @@ function Lobby() {
     firebase
       .gamePlayer(gid, user.uid)
       .set({ displayName: user.displayName, isReady: false });
+
     history.push(`/games/${gid}`);
   };
 

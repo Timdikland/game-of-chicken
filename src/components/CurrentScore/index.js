@@ -1,54 +1,50 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Table, Icon } from "semantic-ui-react";
 
-function CurrentScore({ itemValues, itemInventory, items }) {
+import { ITEMS } from "../../constants/gameItems";
+
+import { GameContext } from "../../context/game";
+
+function CurrentScore() {
+  const game = useContext(GameContext);
+
+  const itemValues = game.values;
+  const itemInventory = game.items;
+
   return (
     <Table unstackable>
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell />
           <Table.HeaderCell>
-            <Icon name="circle" color={items[0]} />
+            <Icon name="circle" color={ITEMS[0]} />
           </Table.HeaderCell>
           <Table.HeaderCell>
-            <Icon name="circle" color={items[1]} />
+            <Icon name="circle" color={ITEMS[1]} />
           </Table.HeaderCell>
           <Table.HeaderCell>
-            <Icon name="circle" color={items[2]} />
+            <Icon name="circle" color={ITEMS[2]} />
           </Table.HeaderCell>
           <Table.HeaderCell>
-            <Icon name="circle" color={items[3]} />
+            <Icon name="circle" color={ITEMS[3]} />
           </Table.HeaderCell>
         </Table.Row>
       </Table.Header>
 
       <Table.Body>
         <Table.Row>
-          <Table.Cell>Items</Table.Cell>
-          <Table.Cell>{itemInventory[0]}</Table.Cell>
-          <Table.Cell>{itemInventory[1]}</Table.Cell>
-          <Table.Cell>{itemInventory[2]}</Table.Cell>
-          <Table.Cell>{itemInventory[3]}</Table.Cell>
-        </Table.Row>
-        <Table.Row>
           <Table.Cell>Values</Table.Cell>
-          <Table.Cell>{itemValues[0]}</Table.Cell>
-          <Table.Cell>{itemValues[1]}</Table.Cell>
-          <Table.Cell>{itemValues[2]}</Table.Cell>
-          <Table.Cell>{itemValues[3]}</Table.Cell>
+          <Table.Cell>{itemValues[ITEMS[0]]}</Table.Cell>
+          <Table.Cell>{itemValues[ITEMS[1]]}</Table.Cell>
+          <Table.Cell>{itemValues[ITEMS[2]]}</Table.Cell>
+          <Table.Cell>{itemValues[ITEMS[3]]}</Table.Cell>
         </Table.Row>
         <Table.Row>
-          <Table.Cell>Score</Table.Cell>
-          <Table.Cell>{itemValues[0] * itemInventory[0]}</Table.Cell>
-          <Table.Cell>{itemValues[1] * itemInventory[1]}</Table.Cell>
-          <Table.Cell>{itemValues[2] * itemInventory[2]}</Table.Cell>
-          <Table.Cell>{itemValues[3] * itemInventory[3]}</Table.Cell>
-          {/* <Table.Cell>
-            {itemValues[0] * itemInventory[0] +
-              itemValues[1] * itemInventory[1] +
-              itemValues[2] * itemInventory[2] +
-              itemValues[3] * itemInventory[3]}
-          </Table.Cell> */}
+          <Table.Cell>Items</Table.Cell>
+          <Table.Cell>{itemInventory[ITEMS[0]]}</Table.Cell>
+          <Table.Cell>{itemInventory[ITEMS[1]]}</Table.Cell>
+          <Table.Cell>{itemInventory[ITEMS[2]]}</Table.Cell>
+          <Table.Cell>{itemInventory[ITEMS[3]]}</Table.Cell>
         </Table.Row>
       </Table.Body>
     </Table>

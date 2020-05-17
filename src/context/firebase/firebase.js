@@ -69,6 +69,58 @@ class Firebase {
     this.db.ref(`games/${gameId}/items/${uid}`);
   gameValuesForUser = (gameId, uid) =>
     this.db.ref(`games/${gameId}/values/${uid}`);
+
+  // *** Initialize Game ***
+
+  doAssignValues = (gameId, userId) => {
+    return this.gameValuesForUser(gameId, userId).set({
+      red: 1,
+      yellow: 2,
+      green: 3,
+      blue: 4,
+    });
+  };
+
+  doAssignItems = (gameId, userId) => {
+    return this.gameItemsForUser(gameId, userId).set({
+      red: 4,
+      yellow: 3,
+      green: 3,
+      blue: 4,
+    });
+  };
+
+  doInitializeGame = (gameId) => {
+    // fetch all players
+    // initialize values for players
+    // initialize items for players
+    // set game to started (if game is started users are redirected to gameBoard)
+    // make it "impossible" to join game
+    return this.gamePlayers(gameId)
+      .once("value")
+      .then((snapshot) => {
+        const promises = [];
+        Object.keys(snapshot.val()).forEach((uid) => {
+          const assignValues = this.doAssignValues(gameId, uid);
+          const doAssignItems = this.doAssignItems(gameId, uid);
+          promises.push(assignValues);
+          promises.push(doAssignItems);
+        });
+        return Promise.all(promises);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  // *** Game Trade API ***
+
+  doCreateOffer = (gameId, ask, bid, offerFrom, offerTo) => {
+    this.gameOffers(gameId).push({
+      ask: ask,
+      bid: bid,
+      offerFrom: offerFrom,
+      offerTo: offerTo,
+    });
+  };
 }
 
 export default Firebase;

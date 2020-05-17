@@ -19,6 +19,7 @@ function Game() {
 
   const handleStartGame = (setState) => (allReady) => {
     if (allReady) {
+      firebase.doInitializeGame(params.gameId);
       setState(true);
     }
   };

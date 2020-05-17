@@ -1,63 +1,52 @@
 import React, { useState, useContext } from "react";
 import { Grid, Button, Dropdown } from "semantic-ui-react";
+import { useParams } from "react-router-dom";
 
 import { FirebaseContext } from "../../context/firebase";
+import { UserContext } from "../../context/user";
+import { GameContext } from "../../context/game";
+
+import { ITEMS } from "../../constants/gameItems";
 
 import OfferRow from "../OfferRow";
 
+import { createOfferToList } from "./createOfferToList";
+
 function NewOffer() {
-  const [bid, setBid] = useState([0, 0, 0, 0]);
-  const [ask, setAsk] = useState([0, 0, 0, 0]);
-  const [offerTo, setOfferTo] = useState("Everyone");
-
   const firebase = useContext(FirebaseContext);
-  const offerListRef = firebase.db.ref("/games/1/offers");
+  const user = useContext(UserContext);
+  const game = useContext(GameContext);
+  const params = useParams();
 
-  const OfferToList = [
-    {
-      key: "Jenny Hess",
-      text: "Jenny Hess",
-      value: "Jenny Hess",
-    },
-    {
-      key: "Elliot Fu",
-      text: "Elliot Fu",
-      value: "Elliot Fu",
-    },
-    {
-      key: "Everyone",
-      text: "Everyone",
-      value: "Everyone",
-    },
-  ];
+  const offerFrom = user.uid;
+  const players = game.players;
+  const offers = game.offers;
+  const items = game.items;
+  const offerToList = createOfferToList(players);
+
+  const zeroState = {};
+  ITEMS.forEach((key) => (zeroState[key] = 0));
+
+  const [bid, setBid] = useState(zeroState);
+  const [ask, setAsk] = useState(zeroState);
+  const [offerTo, setOfferTo] = useState(offerToList[0].value);
 
   const handleChange = (state, setState) => (key, increment) => {
-    let newState = [...state];
     if (increment) {
-      newState[key] = newState[key] + 1;
+      setState({ ...state, [key]: state[key] + 1 });
     } else {
-      newState[key] = newState[key] - 1;
+      setState({ ...state, [key]: state[key] - 1 });
     }
-    setState(newState);
   };
 
   const handleOfferToChange = (setState) => (data) => {
-    setState(data["value"]);
+    setState(data.key);
   };
 
-  const createOffer = (bid, ask, offerTo) => {
-    let canAccept = [];
-    if (offerTo === "Everyone") {
-      canAccept = [1, 2, 3, 4];
-    } else {
-      canAccept.push(offerTo);
-    }
-    offerListRef.push({
-      createdBy: "userId",
-      bid: bid,
-      ask: ask,
-      canAccept: canAccept,
-    });
+  const createOffer = (gameId, ask, bid, offerFrom, offerTo) => {
+    const offerToObj = {};
+    offerTo.map((val, idx) => (offerToObj[idx] = val));
+    firebase.doCreateOffer(gameId, ask, bid, offerFrom, offerToObj);
   };
 
   return (
@@ -70,10 +59,10 @@ function NewOffer() {
       <Grid.Row>
         <Grid.Column>
           <Dropdown
+            placeholder={"Everyone"}
             fluid
-            options={OfferToList}
+            options={offerToList}
             selection
-            value={offerTo}
             onChange={(event, data) => handleOfferToChange(setOfferTo)(data)}
           />
         </Grid.Column>
@@ -102,7 +91,9 @@ function NewOffer() {
         <Grid.Column>
           <Button
             fluid
-            onClick={() => createOffer(bid, ask, offerTo)}
+            onClick={() =>
+              createOffer(params.gameId, ask, bid, offerFrom, offerTo)
+            }
             color={"green"}
           >
             Create a new offer
