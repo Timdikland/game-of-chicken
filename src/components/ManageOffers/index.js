@@ -9,12 +9,14 @@ function ManageOffers() {
       asker: "Tim",
       bid: [0, 1, 0, 0],
       bidder: "Max",
+      offerId: "abc",
     },
     {
       ask: [0, 0, 0, 1],
       asker: "Tim",
       bid: [0, 1, 0, 0],
       bidder: "Max",
+      offerId: "qwe",
     },
   ];
 
@@ -28,6 +30,7 @@ function ManageOffers() {
             asker={val.asker}
             bid={val.bid}
             bidder={val.bidder}
+            offerId={val.offerId}
             items={items}
           />
         );

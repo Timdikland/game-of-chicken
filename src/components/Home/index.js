@@ -11,7 +11,6 @@ function Home() {
 
   const user = useContext(UserContext);
   const firebase = useContext(FirebaseContext);
-  console.log(firebase);
 
   const handleChange = (e) => {
     e.preventDefault();

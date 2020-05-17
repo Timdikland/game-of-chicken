@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Grid, Button, Segment, Transition, List } from "semantic-ui-react";
 
 import { GameContext } from "../../context/game";
@@ -9,21 +9,6 @@ import Inventory from "../Inventory";
 import CurrentScore from "../CurrentScore";
 import NewOffer from "../NewOffer";
 import ManageOffers from "../ManageOffers";
-
-function BoardSegments() {
-  return (
-    <Segment.Group>
-      <Segment>
-        <CurrentScore
-          itemValues={[0, 1, 2, 3]}
-          itemInventory={[3, 6, 7, 1]}
-          items={["red", "yellow", "green", "blue"]}
-        />
-      </Segment>
-      <Segment></Segment>
-    </Segment.Group>
-  );
-}
 
 function OfferGroup({ manageOffersIsActive, newOfferIsActive }) {
   return (
@@ -73,10 +58,19 @@ function GameBoard({ gameState }) {
     <Grid center container>
       <Grid.Row>
         <Grid.Column>
-          <BoardSegments />
+          <CurrentScore
+            itemValues={[0, 1, 2, 3]}
+            itemInventory={[3, 6, 7, 1]}
+            items={["red", "yellow", "green", "blue"]}
+          />
         </Grid.Column>
       </Grid.Row>
-      <Grid.Row columns={2}>
+      <Grid.Row>
+        <Grid.Column>
+          <Offers />
+        </Grid.Column>
+      </Grid.Row>
+      {/* <Grid.Row columns={2}>
         <Grid.Column>
           <Button
             fluid
@@ -101,7 +95,7 @@ function GameBoard({ gameState }) {
             newOfferIsActive={newOfferIsActive}
           />
         </Grid.Column>
-      </Grid.Row>
+      </Grid.Row> */}
       <Grid.Row>
         <Grid.Column>{JSON.stringify(gameState)}</Grid.Column>
       </Grid.Row>
