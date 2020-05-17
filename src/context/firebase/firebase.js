@@ -67,6 +67,10 @@ class Firebase {
   gameOffers = (gameId) => this.db.ref(`games/${gameId}/offers`);
   gameOffer = (gameId, offerId) =>
     this.db.ref(`games/${gameId}/offers/${offerId}`);
+  gameOfferDeclines = (gameId, offerId) =>
+    this.db.ref(`games/${gameId}/offers/${offerId}/declinedBy`);
+  gameOfferAccepts = (gameId, offerId) =>
+    this.db.ref(`games/${gameId}/offers/${offerId}/acceptedBy`);
   gameItemsForUser = (gameId, uid) =>
     this.db.ref(`games/${gameId}/items/${uid}`);
   gameValuesForUser = (gameId, uid) =>
@@ -145,7 +149,7 @@ class Firebase {
   doAcceptOffer = (gameId, offerId, AcceptedByUserId) => {
     // Change The items of the bidder
     // Change the items of the asker
-    // remove the offer from the database
+    // mark offer as accepted
     this.gameOffer(gameId, offerId)
       .once("value")
       .then((snapshot) => {
@@ -165,6 +169,9 @@ class Firebase {
       .then((res1, res2) => this.doRemoveOffer(gameId, offerId))
       .catch((err) => console.log(err));
   };
+
+  doDeclineOffer = (gameId, offerId, userId) =>
+    this.gameOfferDeclines(gameId, offerId).push(userId);
 }
 
 export default Firebase;

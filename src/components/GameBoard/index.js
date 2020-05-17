@@ -6,7 +6,7 @@ import CurrentScore from "../CurrentScore";
 
 function GameBoard() {
   return (
-    <Grid center container padded>
+    <Grid container padded>
       <Grid.Row>
         <Grid.Column>
           <CurrentScore />

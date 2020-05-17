@@ -18,7 +18,6 @@ function Lobby() {
   };
 
   const createGame = () => {
-    console.log(user);
     const gid = firebase.games().push().key;
     // firebase
     //   .gamePlayers(gid)
@@ -41,7 +40,7 @@ function Lobby() {
   };
 
   return (
-    <Grid center container>
+    <Grid container>
       <Grid.Row>
         <Grid.Column textAlign={"center"}>
           <Header>{""}</Header>

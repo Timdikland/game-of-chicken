@@ -4,7 +4,6 @@ import { Grid } from "semantic-ui-react";
 
 function ScoreTable(props) {
   const symbols = ["Circle", "Square", "Triangle", "Pentagon"];
-  console.log(props.score);
   return (
     <Grid celled>
       <Grid.Row>

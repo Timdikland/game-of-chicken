@@ -20,8 +20,6 @@ function NewOffer() {
 
   const offerFrom = user.uid;
   const players = game.players;
-  const offers = game.offers;
-  const items = game.items;
   const offerToList = createOfferToList(players);
 
   const zeroState = {};
@@ -43,16 +41,12 @@ function NewOffer() {
     setState(data.value);
   };
 
-  console.log(offerToList);
-  console.log(offerTo);
-
   const createOffer = (gameId, ask, bid, offerFrom, offerTo) => {
-    console.log(offerTo);
     firebase.doCreateOffer(gameId, ask, bid, offerFrom, offerTo);
   };
 
   return (
-    <Grid container center padded>
+    <Grid container padded>
       <Grid.Row>
         <Grid.Column textAlign={"center"}>
           <h3>{"This offer can be accepted by"}</h3>

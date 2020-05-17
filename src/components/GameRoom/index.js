@@ -7,7 +7,6 @@ function allPlayersReady(players) {
     return false;
   } else {
     let ready = true;
-    console.log(players);
     const playerAttributes = Object.values(players);
     for (let i = 0; i < playerAttributes.length; i++) {
       if (!playerAttributes[i].isReady) {
@@ -29,7 +28,7 @@ function GameRoom({
   // handleStartGame(allReady);
 
   return (
-    <Grid container center>
+    <Grid container>
       <Grid.Row>
         <Grid.Column>
           <Header>Are you ready to play?</Header>

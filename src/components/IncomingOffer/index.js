@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Icon, Table, Button, Header } from "semantic-ui-react";
+import { Grid, Icon, Table, Button } from "semantic-ui-react";
 
 function IncomingOffer({
   ask,
