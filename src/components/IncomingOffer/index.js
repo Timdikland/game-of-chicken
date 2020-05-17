@@ -1,7 +1,45 @@
 import React from "react";
 import { Grid, Icon, Table, Button, Header } from "semantic-ui-react";
 
-function AskTable({ asker, ask, items }) {
+function IncomingOffer({
+  ask,
+  asker,
+  bid,
+  bidder,
+  offerId,
+  handleAccept,
+  handleDecline,
+}) {
+  return (
+    <Grid>
+      <Grid.Row>
+        <Grid.Column width={7}>
+          <BidTable bid={bid} bidder={bidder} />
+        </Grid.Column>
+        <Grid.Column width={2} textAlign={"center"} verticalAlign={"middle"}>
+          <Icon size="large" name="arrow right" />
+        </Grid.Column>
+        <Grid.Column width={7}>
+          <AskTable ask={ask} asker={asker} />
+        </Grid.Column>
+      </Grid.Row>
+      <Grid.Row columns={2}>
+        <Grid.Column>
+          <Button fluid onClick={() => handleAccept(offerId)}>
+            Accept
+          </Button>
+        </Grid.Column>
+        <Grid.Column>
+          <Button fluid onClick={() => handleDecline(offerId)}>
+            Reject
+          </Button>
+        </Grid.Column>
+      </Grid.Row>
+    </Grid>
+  );
+}
+
+function AskTable({ asker, ask }) {
   return (
     <Table size={"small"} basic compact={"very"} singleLine unstackable>
       <Table.Header>
@@ -33,7 +71,7 @@ function AskTable({ asker, ask, items }) {
   );
 }
 
-function BidTable({ bidder, bid, items }) {
+function BidTable({ bidder, bid }) {
   return (
     <Table size={"small"} basic compact={"very"} singleLine unstackable>
       <Table.Header>
@@ -62,32 +100,6 @@ function BidTable({ bidder, bid, items }) {
         </Table.Row>
       </Table.Body>
     </Table>
-  );
-}
-
-function IncomingOffer({ ask, asker, bid, bidder, items }) {
-  return (
-    <Grid>
-      <Grid.Row>
-        <Grid.Column width={7}>
-          <BidTable bid={bid} bidder={bidder} items={items} />
-        </Grid.Column>
-        <Grid.Column width={2} textAlign={"center"} verticalAlign={"middle"}>
-          <Icon size="large" name="arrow right" />
-        </Grid.Column>
-        <Grid.Column width={7}>
-          <AskTable ask={ask} asker={asker} items={items} />
-        </Grid.Column>
-      </Grid.Row>
-      <Grid.Row columns={2}>
-        <Grid.Column>
-          <Button fluid>Accept</Button>
-        </Grid.Column>
-        <Grid.Column>
-          <Button fluid>Reject</Button>
-        </Grid.Column>
-      </Grid.Row>
-    </Grid>
   );
 }
 

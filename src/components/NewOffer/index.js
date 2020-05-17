@@ -40,13 +40,15 @@ function NewOffer() {
   };
 
   const handleOfferToChange = (setState) => (data) => {
-    setState(data.key);
+    setState(data.value);
   };
 
+  console.log(offerToList);
+  console.log(offerTo);
+
   const createOffer = (gameId, ask, bid, offerFrom, offerTo) => {
-    const offerToObj = {};
-    offerTo.map((val, idx) => (offerToObj[idx] = val));
-    firebase.doCreateOffer(gameId, ask, bid, offerFrom, offerToObj);
+    console.log(offerTo);
+    firebase.doCreateOffer(gameId, ask, bid, offerFrom, offerTo);
   };
 
   return (

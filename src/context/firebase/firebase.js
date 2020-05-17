@@ -65,6 +65,8 @@ class Firebase {
   gamePlayer = (gameId, userId) =>
     this.db.ref(`games/${gameId}/players/${userId}`);
   gameOffers = (gameId) => this.db.ref(`games/${gameId}/offers`);
+  gameOffer = (gameId, offerId) =>
+    this.db.ref(`games/${gameId}/offers/${offerId}`);
   gameItemsForUser = (gameId, uid) =>
     this.db.ref(`games/${gameId}/items/${uid}`);
   gameValuesForUser = (gameId, uid) =>
@@ -120,6 +122,49 @@ class Firebase {
       offerFrom: offerFrom,
       offerTo: offerTo,
     });
+  };
+
+  doUpdateItems = (gameId, userId, changeSet) => {
+    return this.gameItemsForUser(gameId, userId)
+      .once("value")
+      .then((snapshot) => {
+        const oldItems = { ...snapshot.val() };
+        const newItems = { ...snapshot.val() };
+        Object.keys(changeSet).forEach((key) => {
+          newItems[key] = oldItems[key] + changeSet[key];
+        });
+        return this.gameItemsForUser(gameId, userId).set(newItems);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  doRemoveOffer = (gameId, offerId) => {
+    return this.gameOffer(gameId, offerId).remove();
+  };
+
+  doAcceptOffer = (gameId, offerId, AcceptedByUserId) => {
+    // Change The items of the bidder
+    // Change the items of the asker
+    // remove the offer from the database
+
+    this.gameOffer(gameId, offerId)
+      .once("value")
+      .then((snapshot) => {
+        const toChangeSet = {};
+        const fromChangeSet = {};
+        const offer = snapshot.val();
+
+        Object.keys(offer.bid).forEach((key) => {
+          toChangeSet[key] = offer.bid[key] - offer.ask[key];
+          fromChangeSet[key] = offer.ask[key] - offer.bid[key];
+        });
+
+        const p1 = this.doUpdateItems(gameId, offer.offerFrom, fromChangeSet);
+        const p2 = this.doUpdateItems(gameId, AcceptedByUserId, toChangeSet);
+        return Promise.all([p1, p2]);
+      })
+      .then((res1, res2) => this.doRemoveOffer(gameId, offerId))
+      .catch((err) => console.log(err));
   };
 }
 

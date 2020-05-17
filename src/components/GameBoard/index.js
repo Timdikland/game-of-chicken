@@ -1,14 +1,10 @@
 import React from "react";
-import { Grid } from "semantic-ui-react";
+import { Grid, Divider } from "semantic-ui-react";
 
 import Offers from "../Offers";
 import CurrentScore from "../CurrentScore";
 
-function GameBoard({ gameState }) {
-  const players = gameState.players;
-  const items = gameState.items;
-  const offers = gameState.offers;
-
+function GameBoard() {
   return (
     <Grid center container>
       <Grid.Row>
@@ -16,13 +12,11 @@ function GameBoard({ gameState }) {
           <CurrentScore />
         </Grid.Column>
       </Grid.Row>
+      <Divider />
       <Grid.Row>
         <Grid.Column>
           <Offers />
         </Grid.Column>
-      </Grid.Row>
-      <Grid.Row>
-        <Grid.Column>{JSON.stringify(gameState)}</Grid.Column>
       </Grid.Row>
     </Grid>
   );
