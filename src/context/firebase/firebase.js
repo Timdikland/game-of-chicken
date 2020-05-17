@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from "uuid";
 import app from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
@@ -18,14 +19,35 @@ class Firebase {
   constructor() {
     app.initializeApp(firebaseConfig);
 
-    /* Helper */
     this.serverValue = app.database.ServerValue;
 
-    /* Firebase APIs */
     this.auth = app.auth();
     this.db = app.database();
     this.functions = app.functions();
   }
+
+  // *** User API ***
+  users = () => this.db.ref("users");
+  user = (uid) => this.db.ref(`users/${uid}`);
+
+  // *** Game API ***
+  games = () => this.db.ref("games");
+  game = (gameId) => this.db.ref(`games/${gameId}`);
+  gamePlayers = (gameId) => this.db.ref(`games/${gameId}/players`);
+  gamePlayer = (gameId, userId) =>
+    this.db.ref(`games/${gameId}/players/${userId}`);
+  gameMetadata = (gameId) => this.db.ref(`games/${gameId}/meta`);
+  gameOffers = (gameId) => this.db.ref(`games/${gameId}/offers`);
+  gameOffer = (gameId, offerId) =>
+    this.db.ref(`games/${gameId}/offers/${offerId}`);
+  gameOfferDeclines = (gameId, offerId) =>
+    this.db.ref(`games/${gameId}/offers/${offerId}/declinedBy`);
+  gameOfferAccepts = (gameId, offerId) =>
+    this.db.ref(`games/${gameId}/offers/${offerId}/acceptedBy`);
+  gameItemsForUser = (gameId, uid) =>
+    this.db.ref(`games/${gameId}/items/${uid}`);
+  gameValuesForUser = (gameId, uid) =>
+    this.db.ref(`games/${gameId}/values/${uid}`);
 
   // *** Auth API ***
   doSignInWithDisplayName = (displayName) => {
@@ -54,27 +76,33 @@ class Firebase {
       }
     });
 
-  // *** User API ***
-  users = () => this.db.ref("users");
-  user = (uid) => this.db.ref(`users/${uid}`);
+  // *** Lobby actions ***
 
-  // *** Game API ***
-  games = () => this.db.ref("games");
-  game = (gameId) => this.db.ref(`games/${gameId}`);
-  gamePlayers = (gameId) => this.db.ref(`games/${gameId}/players`);
-  gamePlayer = (gameId, userId) =>
-    this.db.ref(`games/${gameId}/players/${userId}`);
-  gameOffers = (gameId) => this.db.ref(`games/${gameId}/offers`);
-  gameOffer = (gameId, offerId) =>
-    this.db.ref(`games/${gameId}/offers/${offerId}`);
-  gameOfferDeclines = (gameId, offerId) =>
-    this.db.ref(`games/${gameId}/offers/${offerId}/declinedBy`);
-  gameOfferAccepts = (gameId, offerId) =>
-    this.db.ref(`games/${gameId}/offers/${offerId}/acceptedBy`);
-  gameItemsForUser = (gameId, uid) =>
-    this.db.ref(`games/${gameId}/items/${uid}`);
-  gameValuesForUser = (gameId, uid) =>
-    this.db.ref(`games/${gameId}/values/${uid}`);
+  doCreateNewGame = (userId) => {
+    const uuid = uuidv4();
+    const gameId = this.games().push();
+    return this.gameMetadata(gameId)
+      .set({
+        isStarted: false,
+        isActive: true,
+        joinCode: uuid.split("-")[1],
+      })
+      .then(() => this.doAddPlayerToGame(userId, gameId))
+      .catch((err) => console.log(err));
+  };
+
+  doAddPlayerToGame = (userId, gameId) => {
+    this.user(userId)
+      .once("value")
+      .then((snapshot) => {
+        const user = snapshot.val();
+        return this.gamePlayer(gameId, userId).set({
+          displayName: user.displayName,
+          isReady: false,
+        });
+      })
+      .catch((err) => console.log(err));
+  };
 
   // *** Initialize Game ***
 
