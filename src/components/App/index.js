@@ -16,9 +16,9 @@ function App() {
   const firebase = useContext(FirebaseContext);
   return (
     <div>
-      {/* <Menu fixed={"top"} position={"right"}>
-        <Menu.Item name="sign out" onClick={() => firebase.doSignOut()} />
-      </Menu> */}
+      <Menu fixed={"top"} position={"right"}>
+        <Menu.Item name="game-of-chicken" />
+      </Menu>
       <Router>
         <Switch>
           <Route path="/functions" component={withUser(FunctionButton)} />

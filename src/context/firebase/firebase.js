@@ -146,7 +146,6 @@ class Firebase {
     // Change The items of the bidder
     // Change the items of the asker
     // remove the offer from the database
-
     this.gameOffer(gameId, offerId)
       .once("value")
       .then((snapshot) => {
@@ -155,8 +154,8 @@ class Firebase {
         const offer = snapshot.val();
 
         Object.keys(offer.bid).forEach((key) => {
-          toChangeSet[key] = offer.bid[key] - offer.ask[key];
-          fromChangeSet[key] = offer.ask[key] - offer.bid[key];
+          fromChangeSet[key] = offer.bid[key] - offer.ask[key];
+          toChangeSet[key] = offer.ask[key] - offer.bid[key];
         });
 
         const p1 = this.doUpdateItems(gameId, offer.offerFrom, fromChangeSet);
