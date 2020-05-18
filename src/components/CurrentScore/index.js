@@ -7,10 +7,15 @@ import { GameContext } from "../../context/game";
 
 function CurrentScore() {
   const game = useContext(GameContext);
-
   const itemValues = game.values;
   const itemInventory = game.items;
 
+  return !!itemValues && !!itemInventory ? (
+    <ScoreTable itemValues={itemValues} itemInventory={itemInventory} />
+  ) : null;
+}
+
+function ScoreTable({ itemValues, itemInventory }) {
   return (
     <Table unstackable>
       <Table.Header>

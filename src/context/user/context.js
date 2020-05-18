@@ -17,13 +17,13 @@ export const withUser = (Component) => (props) => {
   };
 
   useEffect(() => {
-    const res = firebase.onAuthUserListener(handleUser, handleNoUser);
-    return () => console.log("?", res);
+    firebase.onAuthUserListener(handleUser, handleNoUser);
+    return () => console.log("auth listener");
   });
 
   return (
     <UserContext.Provider value={user}>
-      <Component {...props} />
+      <Component {...props} />{" "}
     </UserContext.Provider>
   );
 };

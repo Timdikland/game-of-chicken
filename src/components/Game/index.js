@@ -12,10 +12,15 @@ function Game() {
   const gameState = useContext(GameContext);
   const user = useContext(UserContext);
   const firebase = useContext(FirebaseContext);
-
   const params = useParams();
-
   const [gameStarted, setGameStarted] = useState(false);
+
+  const gameHasStarted = firebase
+    .gameMetadata(params.gameId)
+    .once("value")
+    .then((snapshot) => {
+      return snapshot.val().isStarted;
+    });
 
   const handleStartGame = (setState) => (allReady) => {
     if (allReady) {
@@ -26,10 +31,12 @@ function Game() {
 
   const handlePlayerStatusChange = (userId) => (players) => {
     const status = players[userId].isReady;
-    firebase.gamePlayer(params.gameId, userId).update({ isReady: !status });
+    firebase.gamePlayer(params.gameId, userId).update({
+      isReady: !status,
+    });
   };
 
-  return gameStarted ? (
+  return gameStarted || gameHasStarted ? (
     <GameBoard gameState={gameState} />
   ) : (
     <GameRoom

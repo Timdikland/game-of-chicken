@@ -25,14 +25,13 @@ function GameRoom({
 }) {
   const players = gameState.players;
   const allReady = allPlayersReady(players);
-  // handleStartGame(allReady);
 
   return (
     <Grid container>
       <Grid.Row>
         <Grid.Column>
-          <Header>Are you ready to play?</Header>
-          <Header>{`Use the gameId: ${gameId} to join!`}</Header>
+          <Header> Are you ready to play ? </Header>
+          <Header> {`Use the gameId: ${gameId} to join!`} </Header>
         </Grid.Column>
       </Grid.Row>
       <Grid.Row>

@@ -4,18 +4,18 @@ import { Grid, Divider } from "semantic-ui-react";
 import Offers from "../Offers";
 import CurrentScore from "../CurrentScore";
 
-function GameBoard() {
+function GameBoard({ gameState, user }) {
   return (
     <Grid container padded>
       <Grid.Row>
         <Grid.Column>
-          <CurrentScore />
+          <CurrentScore gameState={gameState} user={user} />
         </Grid.Column>
       </Grid.Row>
       <Divider />
       <Grid.Row>
         <Grid.Column>
-          <Offers />
+          <Offers gameState={gameState} user={user} />
         </Grid.Column>
       </Grid.Row>
     </Grid>

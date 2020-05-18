@@ -1,4 +1,6 @@
-import { v4 as uuidv4 } from "uuid";
+import {
+  v4 as uuidv4
+} from "uuid";
 import app from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
@@ -59,7 +61,7 @@ class Firebase {
         });
         this.user(result.user.uid).set({
           uid: result.user.uid,
-          displyName: displayName,
+          displayName: displayName,
         });
       })
       .catch((err) => console.log(err));
@@ -80,7 +82,7 @@ class Firebase {
 
   doCreateNewGame = (userId) => {
     const uuid = uuidv4();
-    const gameId = this.games().push();
+    const gameId = this.games().push().key;
     return this.gameMetadata(gameId)
       .set({
         isStarted: false,
@@ -88,6 +90,7 @@ class Firebase {
         joinCode: uuid.split("-")[1],
       })
       .then(() => this.doAddPlayerToGame(userId, gameId))
+      .then(() => Promise.resolve(gameId))
       .catch((err) => console.log(err));
   };
 
@@ -104,7 +107,7 @@ class Firebase {
       .catch((err) => console.log(err));
   };
 
-  // *** Initialize Game ***
+  // *** GameRoom actions
 
   doAssignValues = (gameId, userId) => {
     return this.gameValuesForUser(gameId, userId).set({
@@ -125,11 +128,6 @@ class Firebase {
   };
 
   doInitializeGame = (gameId) => {
-    // fetch all players
-    // initialize values for players
-    // initialize items for players
-    // set game to started (if game is started users are redirected to gameBoard)
-    // make it "impossible" to join game
     return this.gamePlayers(gameId)
       .once("value")
       .then((snapshot) => {
@@ -160,8 +158,12 @@ class Firebase {
     return this.gameItemsForUser(gameId, userId)
       .once("value")
       .then((snapshot) => {
-        const oldItems = { ...snapshot.val() };
-        const newItems = { ...snapshot.val() };
+        const oldItems = {
+          ...snapshot.val()
+        };
+        const newItems = {
+          ...snapshot.val()
+        };
         Object.keys(changeSet).forEach((key) => {
           newItems[key] = oldItems[key] + changeSet[key];
         });

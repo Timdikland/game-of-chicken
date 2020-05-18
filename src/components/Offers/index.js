@@ -8,15 +8,13 @@ function Offers() {
   const [manageOffersIsActive, setManageOffersIsActive] = useState(false);
   const [newOfferIsActive, setNewOfferIsActive] = useState(false);
 
-  const handleActivateNewOffer = (e) => {
-    e.preventDefault();
-    setNewOfferIsActive(!newOfferIsActive);
+  const handleActivateNewOffer = (state) => () => {
+    setNewOfferIsActive(!state);
     setManageOffersIsActive(false);
   };
 
-  const handleActivateManageOffers = (e) => {
-    e.preventDefault();
-    setManageOffersIsActive(!manageOffersIsActive);
+  const handleActivateManageOffers = (state) => () => {
+    setManageOffersIsActive(!state);
     setNewOfferIsActive(false);
   };
 
@@ -26,7 +24,7 @@ function Offers() {
         <Grid.Column>
           <Button
             fluid
-            onClick={(event, data) => handleActivateNewOffer(event)}
+            onClick={() => handleActivateNewOffer(newOfferIsActive)()}
           >
             new offer
           </Button>
@@ -34,7 +32,7 @@ function Offers() {
         <Grid.Column>
           <Button
             fluid
-            onClick={(event, data) => handleActivateManageOffers(event)}
+            onClick={() => handleActivateManageOffers(manageOffersIsActive)()}
           >
             accept offer
           </Button>
@@ -45,6 +43,10 @@ function Offers() {
           <OfferGroup
             manageOffersIsActive={manageOffersIsActive}
             newOfferIsActive={newOfferIsActive}
+            handleActivateManageOffers={handleActivateManageOffers(
+              manageOffersIsActive
+            )}
+            handleActivateNewOffer={handleActivateNewOffer(newOfferIsActive)}
           />
         </Grid.Column>
       </Grid.Row>
@@ -52,7 +54,12 @@ function Offers() {
   );
 }
 
-function OfferGroup({ manageOffersIsActive, newOfferIsActive }) {
+function OfferGroup({
+  manageOffersIsActive,
+  newOfferIsActive,
+  handleActivateManageOffers,
+  handleActivateNewOffer,
+}) {
   return (
     <Transition.Group
       as={"List"}
@@ -60,15 +67,18 @@ function OfferGroup({ manageOffersIsActive, newOfferIsActive }) {
       divided
       size="huge"
       verticalAlign="middle"
+      animation="slide down"
     >
       {newOfferIsActive ? (
         <List.Item attached>
-          <NewOffer />
+          <NewOffer handleActivateNewOffer={handleActivateNewOffer} />
         </List.Item>
       ) : null}
       {manageOffersIsActive ? (
         <List.Item attached>
-          <ManageOffers />
+          <ManageOffers
+            handleActivateManageOffers={handleActivateManageOffers}
+          />
         </List.Item>
       ) : null}
     </Transition.Group>

@@ -12,7 +12,7 @@ import OfferRow from "../OfferRow";
 
 import { createOfferToList } from "./createOfferToList";
 
-function NewOffer() {
+function NewOffer({ handleActivateNewOffer }) {
   const firebase = useContext(FirebaseContext);
   const user = useContext(UserContext);
   const game = useContext(GameContext);
@@ -43,6 +43,7 @@ function NewOffer() {
 
   const createOffer = (gameId, ask, bid, offerFrom, offerTo) => {
     firebase.doCreateOffer(gameId, ask, bid, offerFrom, offerTo);
+    handleActivateNewOffer();
   };
 
   return (
