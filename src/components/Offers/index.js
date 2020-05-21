@@ -4,6 +4,7 @@ import { Grid, Segment, Transition, Menu } from "semantic-ui-react";
 import NewOffer from "../NewOffer";
 import ManageOffers from "../ManageOffers";
 import CreateOffer from "../CreateOffer";
+import AcceptOffer from "../AcceptOffer";
 
 function Offers() {
   const [activeItem, setActiveItem] = useState("accept");
@@ -11,6 +12,10 @@ function Offers() {
   const handleMenuClick = (e, d) => {
     e.preventDefault();
     setActiveItem(d.name);
+  };
+
+  const createOfferEffect = () => {
+    setActiveItem("manage");
   };
 
   return (
@@ -34,21 +39,15 @@ function Offers() {
               onClick={(e, d) => handleMenuClick(e, d)}
             />
           </Menu>
-          <Transition.Group
-            duration={200}
-            divided
-            size="huge"
-            verticalAlign="middle"
-            animation="slide down"
-          >
+          <Transition.Group duration={200} animation="slide down">
             {activeItem === "create" ? (
               <Segment>
-                <NewOffer handleActivateNewOffer={() => console.log("new")} />
+                <CreateOffer createOfferEffect={createOfferEffect} />
               </Segment>
             ) : null}
             {activeItem === "manage" ? (
               <Segment>
-                <CreateOffer />
+                <AcceptOffer />
               </Segment>
             ) : null}
             {activeItem === "accept" ? (

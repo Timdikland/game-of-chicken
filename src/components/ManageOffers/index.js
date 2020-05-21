@@ -16,6 +16,8 @@ function ManageOffers() {
   const players = game.players;
   const offers = game.offers;
 
+  console.log(offers);
+
   const handleAccept = (offerId) => {
     firebase.doAcceptOffer(params.gameId, offerId, user.uid);
   };

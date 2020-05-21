@@ -1,11 +1,5 @@
 export const createOfferToList = (players) => {
-  const offerToList = [
-    {
-      key: "test",
-      text: "test",
-      value: "test",
-    },
-  ];
+  const offerToList = [];
   Object.keys(players).forEach((key) => {
     const offerTo = {
       key: players[key].displayName,

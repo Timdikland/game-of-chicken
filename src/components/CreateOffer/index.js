@@ -1,16 +1,17 @@
 import React, { useState, useContext } from "react";
 import { useParams } from "react-router-dom";
-import { Grid, Button, Dropdown } from "semantic-ui-react";
+import { Grid, Button, Dropdown, Header } from "semantic-ui-react";
 
 import { FirebaseContext } from "../../context/firebase";
 import { UserContext } from "../../context/user";
 import { GameContext } from "../../context/game";
+import { ITEMS } from "../../constants/gameItems";
 
 import { createOfferToList } from "./createOfferToList";
 import OfferRow from "../OfferRow";
 import OfferSummary from "../OfferSummary";
 
-function CreateOffer() {
+function CreateOffer({ createOfferEffect }) {
   const firebase = useContext(FirebaseContext);
   const user = useContext(UserContext);
   const game = useContext(GameContext);
@@ -19,10 +20,12 @@ function CreateOffer() {
   const offerFrom = user.uid;
   const players = game.players;
   const offerToList = createOfferToList(players);
+  const emptyOffer = {};
+  ITEMS.forEach((key) => (emptyOffer[key] = 0));
 
-  const [offerTo, setOfferTo] = useState(offerToList[0]);
-  const [bid, setBid] = useState(null);
-  const [ask, setAsk] = useState(null);
+  const [offerTo, setOfferTo] = useState(offerToList[0].value);
+  const [bid, setBid] = useState(emptyOffer);
+  const [ask, setAsk] = useState(emptyOffer);
   const [step, setStep] = useState(0);
 
   const handleNextStep = (currentStep) => {
@@ -37,94 +40,151 @@ function CreateOffer() {
   const createOffer = () => {
     const gameId = params.gameId;
     firebase.doCreateOffer(gameId, ask, bid, offerFrom, offerTo);
+    createOfferEffect();
   };
 
   const changeOfferTo = (setState) => (event, data) => {
     event.preventDefault();
-    setState(data);
+    setState(data.value);
   };
 
-  const changeOfferState = (setState, currentValue) => {
-    return null;
+  const changeOfferState = (setState, currentState) => (key, mode) => {
+    if (mode === "increment") {
+      setState({ ...currentState, [key]: currentState[key] + 1 });
+    } else if (mode === "decrement") {
+      setState({ ...currentState, [key]: currentState[key] - 1 });
+    }
   };
+
+  console.log(players);
+
+  return (
+    <div>
+      {step === 0 ? (
+        <OfferToForm
+          offerTo={offerTo}
+          offerToList={offerToList}
+          handleChange={changeOfferTo(setOfferTo)}
+        />
+      ) : null}
+      {step === 1 ? (
+        <BidForm bid={bid} handleChange={changeOfferState(setBid, bid)} />
+      ) : null}
+      {step === 2 ? (
+        <AskForm ask={ask} handleChange={changeOfferState(setAsk, ask)} />
+      ) : null}
+      {step === 3 ? (
+        <FinalCheck
+          offerTo={players[offerTo].displayName}
+          bid={bid}
+          ask={ask}
+          offerFrom={user.displayName}
+        />
+      ) : null}
+      <Grid>
+        <Grid.Row columns={2}>
+          <Grid.Column>
+            {[1, 2, 3].includes(step) ? (
+              <Button fluid onClick={() => handlePreviousStep(step)}>
+                Previous step
+              </Button>
+            ) : null}
+          </Grid.Column>
+          <Grid.Column>
+            {[0, 1, 2].includes(step) ? (
+              <Button fluid onClick={() => handleNextStep(step)}>
+                Next step
+              </Button>
+            ) : (
+              <Button fluid onClick={() => createOffer()}>
+                Creates offer
+              </Button>
+            )}
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+    </div>
+  );
+}
+
+function OfferToForm({ offerTo, offerToList, handleChange }) {
+  const offerToName = offerToList[0].key;
 
   return (
     <Grid>
       <Grid.Row>
         <Grid.Column>
-          {step === 0 ? (
-            <OfferToForm
-              offerTo={offerTo}
-              offerToList={offerToList}
-              handleChange={changeOfferTo(setOfferTo)}
-            />
-          ) : null}
-          {step === 1 ? (
-            <BidForm bid={bid} handleChange={changeOfferState(setBid, bid)} />
-          ) : null}
-          {step === 2 ? (
-            <AskForm ask={ask} handleChange={changeOfferState(setAsk, ask)} />
-          ) : null}
-          {step === 3 ? (
-            <FinalCheck
-              offerTo={offerTo}
-              bid={bid}
-              ask={ask}
-              offerFrom={user.displayName}
-            />
-          ) : null}
+          <Header>Who is this offer for?</Header>
         </Grid.Column>
       </Grid.Row>
-      <Grid.Row columns={2}>
+      <Grid.Row>
         <Grid.Column>
-          {[1, 2, 3].includes(step) ? (
-            <Button fluid onClick={() => handlePreviousStep(step)}>
-              Previous step
-            </Button>
-          ) : null}
-        </Grid.Column>
-        <Grid.Column>
-          {[0, 1, 2].includes(step) ? (
-            <Button fluid onClick={() => handleNextStep(step)}>
-              Next step
-            </Button>
-          ) : (
-            <Button fluid onClick={() => createOffer()}>
-              Creates offer
-            </Button>
-          )}
+          <Dropdown
+            placeholder={offerToName}
+            fluid
+            options={offerToList}
+            selection
+            onChange={(event, data) => handleChange(event, data)}
+          />
         </Grid.Column>
       </Grid.Row>
     </Grid>
   );
 }
 
-function OfferToForm({ offerTo, offerToList, handleChange }) {
-  const offerToName = offerTo.key;
-  console.log(offerToList);
-
+function BidForm({ bid, handleChange }) {
   return (
-    <Dropdown
-      placeholder={offerToName}
-      fluid
-      options={offerToList}
-      selection
-      onChange={(event, data) => handleChange(event, data)}
-    />
+    <Grid>
+      <Grid.Row>
+        <Grid.Column>
+          <Header>What do you offer?</Header>
+        </Grid.Column>
+      </Grid.Row>
+      <Grid.Row>
+        <Grid.Column>
+          <OfferRow offerState={bid} handleChange={handleChange} />
+        </Grid.Column>
+      </Grid.Row>
+    </Grid>
   );
 }
 
-function BidForm({ bid, handleChange }) {
-  return <OfferRow offerState={bid} handleChange={handleChange} />;
-}
-
 function AskForm({ ask, handleChange }) {
-  return <OfferRow offerState={ask} handleChange={handleChange} />;
+  return (
+    <Grid>
+      <Grid.Row>
+        <Grid.Column>
+          <Header>What do you offer?</Header>
+        </Grid.Column>
+      </Grid.Row>
+      <Grid.Row>
+        <Grid.Column>
+          <OfferRow offerState={ask} handleChange={handleChange} />
+        </Grid.Column>
+      </Grid.Row>
+    </Grid>
+  );
 }
 
 function FinalCheck({ ask, bid, offerFrom, offerTo }) {
   return (
-    <OfferSummary ask={ask} bid={bid} asker={offerFrom} bidder={offerTo} />
+    <Grid>
+      <Grid.Row>
+        <Grid.Column>
+          <Header>Check your offer</Header>
+        </Grid.Column>
+      </Grid.Row>
+      <Grid.Row>
+        <Grid.Column>
+          <OfferSummary
+            ask={ask}
+            bid={bid}
+            asker={offerFrom}
+            bidder={offerTo}
+          />
+        </Grid.Column>
+      </Grid.Row>
+    </Grid>
   );
 }
 

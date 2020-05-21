@@ -12,7 +12,7 @@ function OfferRow({ offerState, handleChange }) {
                 attached={"top"}
                 fluid
                 icon={"angle up"}
-                onClick={() => handleChange(key, true)}
+                onClick={() => handleChange(key, "increment")}
               />
               <Segment>
                 <Icon name={"circle"} color={key} size={"large"} />
@@ -22,7 +22,7 @@ function OfferRow({ offerState, handleChange }) {
                 attached={"bottom"}
                 fluid
                 icon={"angle down"}
-                onClick={() => handleChange(key, false)}
+                onClick={() => handleChange(key, "decrement")}
               />
             </Segment.Group>
           </Grid.Column>

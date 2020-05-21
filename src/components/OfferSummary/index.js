@@ -55,7 +55,7 @@ function BidTable({ bidder, bid }) {
   return (
     <Table size={"small"} basic compact={"very"} singleLine unstackable>
       <Table.Header>
-        <Table.HeaderCell colSpan="4" testAlign={"left"}>
+        <Table.HeaderCell colSpan="4" textAlign={"left"}>
           {bidder}
         </Table.HeaderCell>
       </Table.Header>

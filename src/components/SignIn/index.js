@@ -13,7 +13,7 @@ const SignIn = () => {
         <Header as="h2" textAlign="center">
           Enter your name
         </Header>
-        <Form size="large" onSubmit={(e, d) => console.log(e, d)}>
+        <Form onSubmit={(e, d) => console.log(e, d)}>
           <Segment>
             <Form.Input
               fluid

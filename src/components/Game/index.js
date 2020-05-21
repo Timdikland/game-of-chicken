@@ -20,11 +20,9 @@ function Game() {
     .gameMetadata(params.gameId)
     .once("value")
     .then((snapshot) => {
-      console.log(snapshot.val());
       return snapshot.val().isStarted;
     })
     .then((res) => {
-      console.log("in promise", res);
       setGameHasStarted(res);
     });
 
@@ -41,11 +39,6 @@ function Game() {
       isReady: !status,
     });
   };
-
-  console.log("gameStarted", gameStarted);
-  console.log("gameHasStarted", gameHasStarted);
-
-  console.log(gameStarted || gameHasStarted);
 
   return gameStarted || gameHasStarted ? (
     <GameBoard gameState={gameState} />
