@@ -56,7 +56,7 @@ function NonEmptyOfferList({
         if (isVisible(offers[offerId], userId)) {
           return (
             <div>
-              <Divider />
+              {idx !== 0 ? <Divider /> : null}
               <IncomingOffer
                 ask={offers[offerId].ask}
                 asker={players[offers[offerId].offerTo].displayName}

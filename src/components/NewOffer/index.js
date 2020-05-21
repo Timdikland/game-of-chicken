@@ -28,6 +28,7 @@ function NewOffer({ handleActivateNewOffer }) {
   const [bid, setBid] = useState(zeroState);
   const [ask, setAsk] = useState(zeroState);
   const [offerTo, setOfferTo] = useState(offerToList[0].value);
+  const [offerToName, setOfferToName] = useState(offerToList[0].key);
 
   const handleChange = (state, setState) => (key, increment) => {
     if (increment) {
@@ -37,7 +38,8 @@ function NewOffer({ handleActivateNewOffer }) {
     }
   };
 
-  const handleOfferToChange = (setState) => (data) => {
+  const handleOfferToChange = (setState) => (setNameState) => (data) => {
+    setNameState(data.key);
     setState(data.value);
   };
 
@@ -56,11 +58,13 @@ function NewOffer({ handleActivateNewOffer }) {
       <Grid.Row>
         <Grid.Column>
           <Dropdown
-            placeholder={"Everyone"}
+            placeholder={offerToName}
             fluid
             options={offerToList}
             selection
-            onChange={(event, data) => handleOfferToChange(setOfferTo)(data)}
+            onChange={(event, data) =>
+              handleOfferToChange(setOfferTo)(setOfferToName)(data)
+            }
           />
         </Grid.Column>
       </Grid.Row>

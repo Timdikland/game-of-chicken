@@ -1,6 +1,4 @@
-import {
-  v4 as uuidv4
-} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import app from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
@@ -140,6 +138,11 @@ class Firebase {
         });
         return Promise.all(promises);
       })
+      .then((res) =>
+        this.gameMetadata(gameId).update({
+          isStarted: true,
+        })
+      )
       .catch((err) => console.log(err));
   };
 
@@ -159,10 +162,10 @@ class Firebase {
       .once("value")
       .then((snapshot) => {
         const oldItems = {
-          ...snapshot.val()
+          ...snapshot.val(),
         };
         const newItems = {
-          ...snapshot.val()
+          ...snapshot.val(),
         };
         Object.keys(changeSet).forEach((key) => {
           newItems[key] = oldItems[key] + changeSet[key];

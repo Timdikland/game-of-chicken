@@ -1,87 +1,67 @@
 import React, { useState } from "react";
-import { Button, Grid, List, Transition } from "semantic-ui-react";
+import { Grid, Segment, Transition, Menu } from "semantic-ui-react";
 
 import NewOffer from "../NewOffer";
 import ManageOffers from "../ManageOffers";
+import CreateOffer from "../CreateOffer";
 
 function Offers() {
-  const [manageOffersIsActive, setManageOffersIsActive] = useState(false);
-  const [newOfferIsActive, setNewOfferIsActive] = useState(false);
+  const [activeItem, setActiveItem] = useState("accept");
 
-  const handleActivateNewOffer = (state) => () => {
-    setNewOfferIsActive(!state);
-    setManageOffersIsActive(false);
-  };
-
-  const handleActivateManageOffers = (state) => () => {
-    setManageOffersIsActive(!state);
-    setNewOfferIsActive(false);
+  const handleMenuClick = (e, d) => {
+    e.preventDefault();
+    setActiveItem(d.name);
   };
 
   return (
     <Grid>
-      <Grid.Row columns={2}>
-        <Grid.Column>
-          <Button
-            fluid
-            onClick={() => handleActivateNewOffer(newOfferIsActive)()}
-          >
-            new offer
-          </Button>
-        </Grid.Column>
-        <Grid.Column>
-          <Button
-            fluid
-            onClick={() => handleActivateManageOffers(manageOffersIsActive)()}
-          >
-            accept offer
-          </Button>
-        </Grid.Column>
-      </Grid.Row>
       <Grid.Row>
         <Grid.Column>
-          <OfferGroup
-            manageOffersIsActive={manageOffersIsActive}
-            newOfferIsActive={newOfferIsActive}
-            handleActivateManageOffers={handleActivateManageOffers(
-              manageOffersIsActive
-            )}
-            handleActivateNewOffer={handleActivateNewOffer(newOfferIsActive)}
-          />
+          <Menu tabular attached={"top"} fluid widths={3}>
+            <Menu.Item
+              name={"create"}
+              active={activeItem === "create"}
+              onClick={(e, d) => handleMenuClick(e, d)}
+            />
+            <Menu.Item
+              name={"manage"}
+              active={activeItem === "manage"}
+              onClick={(e, d) => handleMenuClick(e, d)}
+            />
+            <Menu.Item
+              name={"accept"}
+              active={activeItem === "accept"}
+              onClick={(e, d) => handleMenuClick(e, d)}
+            />
+          </Menu>
+          <Transition.Group
+            duration={200}
+            divided
+            size="huge"
+            verticalAlign="middle"
+            animation="slide down"
+          >
+            {activeItem === "create" ? (
+              <Segment>
+                <NewOffer handleActivateNewOffer={() => console.log("new")} />
+              </Segment>
+            ) : null}
+            {activeItem === "manage" ? (
+              <Segment>
+                <CreateOffer />
+              </Segment>
+            ) : null}
+            {activeItem === "accept" ? (
+              <Segment>
+                <ManageOffers
+                  handleActivateManageOffers={() => console.log("new")}
+                />
+              </Segment>
+            ) : null}
+          </Transition.Group>
         </Grid.Column>
       </Grid.Row>
     </Grid>
-  );
-}
-
-function OfferGroup({
-  manageOffersIsActive,
-  newOfferIsActive,
-  handleActivateManageOffers,
-  handleActivateNewOffer,
-}) {
-  return (
-    <Transition.Group
-      as={"List"}
-      duration={500}
-      divided
-      size="huge"
-      verticalAlign="middle"
-      animation="slide down"
-    >
-      {newOfferIsActive ? (
-        <List.Item attached>
-          <NewOffer handleActivateNewOffer={handleActivateNewOffer} />
-        </List.Item>
-      ) : null}
-      {manageOffersIsActive ? (
-        <List.Item attached>
-          <ManageOffers
-            handleActivateManageOffers={handleActivateManageOffers}
-          />
-        </List.Item>
-      ) : null}
-    </Transition.Group>
   );
 }
 

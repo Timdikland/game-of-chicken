@@ -14,12 +14,18 @@ function Game() {
   const firebase = useContext(FirebaseContext);
   const params = useParams();
   const [gameStarted, setGameStarted] = useState(false);
+  const [gameHasStarted, setGameHasStarted] = useState(false);
 
-  const gameHasStarted = firebase
+  firebase
     .gameMetadata(params.gameId)
     .once("value")
     .then((snapshot) => {
+      console.log(snapshot.val());
       return snapshot.val().isStarted;
+    })
+    .then((res) => {
+      console.log("in promise", res);
+      setGameHasStarted(res);
     });
 
   const handleStartGame = (setState) => (allReady) => {
@@ -35,6 +41,11 @@ function Game() {
       isReady: !status,
     });
   };
+
+  console.log("gameStarted", gameStarted);
+  console.log("gameHasStarted", gameHasStarted);
+
+  console.log(gameStarted || gameHasStarted);
 
   return gameStarted || gameHasStarted ? (
     <GameBoard gameState={gameState} />
