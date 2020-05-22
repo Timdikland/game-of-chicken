@@ -7,9 +7,11 @@ import { UserContext } from "../../context/user";
 import { GameContext } from "../../context/game";
 import { ITEMS } from "../../constants/gameItems";
 
-import { createOfferToList } from "./createOfferToList";
 import OfferRow from "../OfferRow";
 import OfferSummary from "../OfferSummary";
+
+import { createOfferToList } from "./createOfferToList";
+import validateOffer, { validateOnlyNegative } from "./validateOffer";
 
 function CreateOffer({ createOfferEffect }) {
   const firebase = useContext(FirebaseContext);
@@ -21,6 +23,7 @@ function CreateOffer({ createOfferEffect }) {
   const players = game.players;
   const offerToList = createOfferToList(players);
   const emptyOffer = {};
+
   ITEMS.forEach((key) => (emptyOffer[key] = 0));
 
   const [offerTo, setOfferTo] = useState(offerToList[0].value);
@@ -48,15 +51,47 @@ function CreateOffer({ createOfferEffect }) {
     setState(data.value);
   };
 
-  const changeOfferState = (setState, currentState) => (key, mode) => {
+  const changeBidOfferState = (setState, currentState) => (key, mode) => {
     if (mode === "increment") {
-      setState({ ...currentState, [key]: currentState[key] + 1 });
+      const proposedState = { ...currentState, [key]: currentState[key] + 1 };
+      const isValid = validateOffer(
+        game.offers,
+        game.items,
+        user.uid,
+        proposedState
+      );
+      if (isValid) {
+        setState(proposedState);
+      }
     } else if (mode === "decrement") {
-      setState({ ...currentState, [key]: currentState[key] - 1 });
+      const proposedState = { ...currentState, [key]: currentState[key] - 1 };
+      const isValid = validateOffer(
+        game.offers,
+        game.items,
+        user.uid,
+        proposedState
+      );
+      if (isValid) {
+        setState(proposedState);
+      }
     }
   };
 
-  console.log(players);
+  const changeAskOfferState = (setState, currentState) => (key, mode) => {
+    if (mode === "increment") {
+      const proposedState = { ...currentState, [key]: currentState[key] + 1 };
+      const isValid = validateOnlyNegative(proposedState);
+      if (isValid) {
+        setState(proposedState);
+      }
+    } else if (mode === "decrement") {
+      const proposedState = { ...currentState, [key]: currentState[key] - 1 };
+      const isValid = validateOnlyNegative(proposedState);
+      if (isValid) {
+        setState(proposedState);
+      }
+    }
+  };
 
   return (
     <div>
@@ -68,10 +103,10 @@ function CreateOffer({ createOfferEffect }) {
         />
       ) : null}
       {step === 1 ? (
-        <BidForm bid={bid} handleChange={changeOfferState(setBid, bid)} />
+        <BidForm bid={bid} handleChange={changeBidOfferState(setBid, bid)} />
       ) : null}
       {step === 2 ? (
-        <AskForm ask={ask} handleChange={changeOfferState(setAsk, ask)} />
+        <AskForm ask={ask} handleChange={changeAskOfferState(setAsk, ask)} />
       ) : null}
       {step === 3 ? (
         <FinalCheck
