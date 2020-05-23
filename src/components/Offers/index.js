@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Grid, Segment, Transition, Menu } from "semantic-ui-react";
 
-import NewOffer from "../NewOffer";
 import ManageOffers from "../ManageOffers";
 import CreateOffer from "../CreateOffer";
 import Trade from "../Trade";
@@ -41,17 +40,17 @@ function Offers() {
           </Menu>
           <Transition.Group duration={200} animation="slide down">
             {activeItem === "create" ? (
-              <Segment>
+              <Segment style={{ overflow: "auto", maxHeight: "40vh" }}>
                 <CreateOffer createOfferEffect={createOfferEffect} />
               </Segment>
             ) : null}
             {activeItem === "manage" ? (
-              <Segment>
+              <Segment style={{ overflow: "auto", maxHeight: "40vh" }}>
                 <ManageOffers />
               </Segment>
             ) : null}
             {activeItem === "accept" ? (
-              <Segment>
+              <Segment style={{ overflow: "auto", maxHeight: "40vh" }}>
                 <Trade handleActivateManageOffers={() => console.log("new")} />
               </Segment>
             ) : null}

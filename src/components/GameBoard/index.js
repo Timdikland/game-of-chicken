@@ -17,6 +17,11 @@ function GameBoard({ gameState, user }) {
           <Offers gameState={gameState} user={user} />
         </Grid.Column>
       </Grid.Row>
+      <Grid.Row>
+        <Grid.Column>
+          <CurrentScore gamestate={gameState} user={user} />
+        </Grid.Column>
+      </Grid.Row>
     </Grid>
   );
 }

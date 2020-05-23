@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Table, Icon } from "semantic-ui-react";
+import { Table, Icon, Grid } from "semantic-ui-react";
 
 import { ITEMS } from "../../constants/gameItems";
 
@@ -11,8 +11,20 @@ function CurrentScore() {
   const itemInventory = game.items;
 
   return !!itemValues && !!itemInventory ? (
-    <ScoreTable itemValues={itemValues} itemInventory={itemInventory} />
-  ) : null;
+    <Grid style={{ height: "20vh" }}>
+      <Grid.Row>
+        <Grid.Column>
+          <ScoreTable itemValues={itemValues} itemInventory={itemInventory} />
+        </Grid.Column>
+      </Grid.Row>
+    </Grid>
+  ) : (
+    <Grid style={{ height: "20vh" }}>
+      <Grid.Row>
+        <Grid.Column></Grid.Column>
+      </Grid.Row>
+    </Grid>
+  );
 }
 
 function ScoreTable({ itemValues, itemInventory }) {
