@@ -1,21 +1,29 @@
-function replaceUserIdByDisplayName(offerList, players) {
+function replaceUserIdByDisplayName(offers, players) {
   const cleanedOffers = [];
-  offerList.forEach((offer) => {
-    const newOfferFrom = players[offer["offerFrom"]].displayName;
-    const newOfferTo = players[offer["offerTo"]].displayName;
+  Object.keys(offers).forEach((offerId) => {
+    const newOfferFrom = players[offers[offerId]["offerFrom"]].displayName;
+    const newOfferTo = players[offers[offerId]["offerTo"]].displayName;
     cleanedOffers.push({
-      ...offer,
+      ...offers[offerId],
       offerTo: newOfferTo,
       offerFrom: newOfferFrom,
+      offerId: offerId,
     });
   });
+  console.log("cleaned offers", cleanedOffers);
   return cleanedOffers;
 }
 
 function filterOffers(game, userId) {
   if (game.offers) {
-    const offerList = Object.values(game.offers);
-    const filteredOffers = offerList.filter((off) => off.offerFrom === userId);
+    const offerIdList = Object.keys(game.offers);
+    const filteredOfferIdList = offerIdList.filter(
+      (offerId) => game.offers[offerId].offerFrom === userId
+    );
+    let filteredOffers = {};
+    filteredOfferIdList.forEach((offerId) => {
+      filteredOffers[offerId] = game.offers[offerId];
+    });
     return replaceUserIdByDisplayName(filteredOffers, game.players);
   } else {
     return null;

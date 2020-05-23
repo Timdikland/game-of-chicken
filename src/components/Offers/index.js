@@ -4,7 +4,6 @@ import { Grid, Segment, Transition, Menu } from "semantic-ui-react";
 import NewOffer from "../NewOffer";
 import ManageOffers from "../ManageOffers";
 import CreateOffer from "../CreateOffer";
-import AcceptOffer from "../AcceptOffer";
 import Trade from "../Trade";
 
 function Offers() {

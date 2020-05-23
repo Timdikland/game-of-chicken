@@ -21,7 +21,7 @@ function CreateOffer({ createOfferEffect }) {
 
   const offerFrom = user.uid;
   const players = game.players;
-  const offerToList = createOfferToList(players);
+  const offerToList = createOfferToList(players, user.uid);
   const emptyOffer = {};
 
   ITEMS.forEach((key) => (emptyOffer[key] = 0));

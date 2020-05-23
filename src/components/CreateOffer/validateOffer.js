@@ -59,10 +59,23 @@ export function getAvailableItems(offers, items, userId) {
 }
 
 export function validateOffer(offers, items, userId, newOffer) {
-  const activeOffers = getActiveOffers(offers, userId);
-  let isValid = true;
-  if (!!activeOffers) {
-    const availableItems = getAvailableItems(activeOffers, items, userId);
+  if (!!offers) {
+    const activeOffers = getActiveOffers(offers, userId);
+    let isValid = true;
+    if (!!activeOffers) {
+      const availableItems = getAvailableItems(activeOffers, items, userId);
+      Object.keys(availableItems).forEach((key) => {
+        if (newOffer[key] > availableItems[key]) {
+          isValid = false;
+        } else if (newOffer[key] < 0) {
+          isValid = false;
+        }
+      });
+    }
+    return isValid;
+  } else {
+    let isValid = true;
+    const availableItems = { ...items };
     Object.keys(availableItems).forEach((key) => {
       if (newOffer[key] > availableItems[key]) {
         isValid = false;
@@ -70,8 +83,8 @@ export function validateOffer(offers, items, userId, newOffer) {
         isValid = false;
       }
     });
+    return isValid;
   }
-  return isValid;
 }
 
 export function validateOnlyNegative(newOffer) {

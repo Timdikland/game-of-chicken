@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
-import { Divider } from "semantic-ui-react";
+import { useParams } from "react-router-dom";
+import { Divider, Button } from "semantic-ui-react";
 
 import { FirebaseContext } from "../../context/firebase";
 import { UserContext } from "../../context/user";
@@ -14,12 +15,20 @@ function AcceptOffer() {
   const user = useContext(UserContext);
   const game = useContext(GameContext);
 
+  const gameId = useParams().gameId;
   const filteredOffers = filterOffers(game, user.uid);
+
+  const handleRetractOffer = (offerId) => {
+    firebase.doRemoveOffer(gameId, offerId);
+  };
 
   return (
     <div>
       {!!filteredOffers ? (
-        <FilteredOfferList offers={filteredOffers} />
+        <FilteredOfferList
+          offers={filteredOffers}
+          handleRetractOffer={handleRetractOffer}
+        />
       ) : (
         <p>you have no offers at the moment</p>
       )}
@@ -27,8 +36,7 @@ function AcceptOffer() {
   );
 }
 
-function FilteredOfferList({ offers }) {
-  console.log(offers);
+function FilteredOfferList({ offers, handleRetractOffer }) {
   return (
     <div>
       {offers.map((offer, idx) => {
@@ -41,6 +49,9 @@ function FilteredOfferList({ offers }) {
               asker={offer.offerTo}
               bidder={offer.offerFrom}
             />
+            <Button onClick={() => handleRetractOffer(offer.offerId)}>
+              Retract offer
+            </Button>
           </div>
         );
       })}
