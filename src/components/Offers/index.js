@@ -5,6 +5,7 @@ import NewOffer from "../NewOffer";
 import ManageOffers from "../ManageOffers";
 import CreateOffer from "../CreateOffer";
 import AcceptOffer from "../AcceptOffer";
+import Trade from "../Trade";
 
 function Offers() {
   const [activeItem, setActiveItem] = useState("accept");
@@ -47,14 +48,12 @@ function Offers() {
             ) : null}
             {activeItem === "manage" ? (
               <Segment>
-                <AcceptOffer />
+                <ManageOffers />
               </Segment>
             ) : null}
             {activeItem === "accept" ? (
               <Segment>
-                <ManageOffers
-                  handleActivateManageOffers={() => console.log("new")}
-                />
+                <Trade handleActivateManageOffers={() => console.log("new")} />
               </Segment>
             ) : null}
           </Transition.Group>

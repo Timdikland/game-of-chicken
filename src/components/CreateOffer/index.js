@@ -32,7 +32,6 @@ function CreateOffer({ createOfferEffect }) {
   const [step, setStep] = useState(0);
 
   const handleNextStep = (currentStep) => {
-    console.log(offerTo);
     setStep(currentStep + 1);
   };
 
